@@ -1,4 +1,4 @@
-# GeneralInterfaceHardwaresimulation
+# generalInterfaceHardwaresimulation
  - A general interface is being developed to facilitate the exchange of hardware simulations within a specific class.
  - A hardware simulation is a simulation in which hardware components are virtually replicated to simulate their behavior, functionality, and performance. In this process, a software-based representation of the hardware is created, allowing the analysis, testing, or modeling of the behavior and interactions of real hardware.
 
@@ -27,7 +27,7 @@ The figure presents a high-level representation of a generic interface designed 
 
 
 ```
-git clone https://github.com/Mohammad-Nour-Dahi/GeneralInterfaceHardwaresimulation.git 
+git clone https://github.com/Mohammad-Nour-Dahi/generalInterfaceHardwaresimulation.git 
 ```
 
 ## Installing Java and Maven
@@ -251,12 +251,13 @@ Follow the steps below to create the input file:
 
 #### To run the program, execute the following command in the terminal or command prompt:
 ```bash
-mvn exec:java -Dexec.mainClass=org.example.GeneralInterfaceHardwaresimulation -Dexec.args="-jsonFile "Path to the input.json"" 
+
+mvn exec:java -Dexec.mainClass=generalInterfaceHardwaresimulation.GeneralInterfaceHardwaresimulation -Dexec.args="-jsonFile "<Path to the input.json>"" 
 ```
 
-Make sure you have Maven installed on your system before running the command. This command will execute the Java main class `GeneralInterfaceHardwaresimulation.GeneralInterfaceHardwaresimulation` and provide the JSON input file path as the argument.
+Make sure you have Maven installed on your system before running the command. This command will execute the Java main class `generalInterfaceHardwaresimulation.generalInterfaceHardwaresimulation` and provide the JSON input file path as the argument.
 
-Replace `"Path to the input.json"` with the actual file path of your JSON input file.
+Replace `"<Path to the input.json>"` with the actual file path of your JSON input file.
 
 
 
