@@ -1,0 +1,188 @@
+package output;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import managementOFJsonNodeALL.JsonNodeALL;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+
+/**
+ * The SniperOutput class extends GenerateOutputParametersImplements and represents a class for generating Sniper output.
+ * and provides methods to generate statistics parameters in JSON format
+ * based on a given file path.
+ */
+public class SniperOutput extends GenerateOutputParametersImplements {
+    // List of parameter names to be included in the output JSON
+    List<String> parameterList = new ArrayList<>(Arrays.asList(
+            "Time (ns)", "Instructions", "Cycles",
+            "Branch predictor stats.num correct",
+            "TLB Summary.I-TLB.num misses",
+            "TLB Summary.D-TLB.num accesses",
+            "Cache Summary.Cache L1-I.num cache misses",
+            "TLB Summary.D-TLB.num misses",
+            "Cache Summary.Cache L1-D.num cache accesses",
+            "Branch predictor stats.num incorrect",
+            "Cache Summary.Cache L2.num cache misses",
+            "TLB Summary.I-TLB.num accesses",
+            "Cache Summary.Cache L1-I.num cache accesses",
+            "Cache Summary.Cache L1-D.num cache misses",
+            "Cache Summary.Cache L2.num cache accesses",
+            "Cache Summary.Cache L2.miss rate",
+            "Cache Summary.Cache L1-D.miss rate",
+            "Cache Summary.Cache L1-I.miss rate",
+            "Cache Summary.Cache L2.mpki",
+            "Cache Summary.Cache L1-D.mpki",
+            "Cache Summary.Cache L1-I.mpki"));
+
+    /**
+     * Generate a JSON parameter that uses a specified file path.
+     * The generated JSON parameter should contain the mapping of simulation results
+     * with the output parameters for the general interface.
+     *
+     * @param filePath The path to the file containing statistics data.
+     * @return A formatted JSON string representing the statistics parameters.
+     */
+    @Override
+    public String generateStatisticsParametersJson(String filePath) {
+        JsonNode generateHardwaresimulationOutputParametersJson = objectMapper.createObjectNode();
+        ObjectNode resultJson= objectMapper.createObjectNode();
+        String outputResultJson = "";
+        String generateHardwaresimulationOutputParameters = generateStatisticsParametersJsonSniper(filePath);
+        try {
+            generateHardwaresimulationOutputParametersJson = objectMapper.readTree(generateHardwaresimulationOutputParameters);
+        } catch (JsonProcessingException e) {
+            System.err.println("Error parsing JSON: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // Iterate through the parameterList and add parameters to the resultJson
+        for (String parameter : parameterList) {
+            if (JsonNodeALL.hasALL(generateHardwaresimulationOutputParametersJson, parameter)) {
+                JsonNode value = JsonNodeALL.getALL(generateHardwaresimulationOutputParametersJson, parameter);
+                resultJson.set(parameter, value);
+            }
+        }
+
+        try {
+            // Convert the resultJson to a formatted JSON string
+            ObjectWriter objectWriter = objectMapper.writer().with(SerializationFeature.INDENT_OUTPUT);
+            outputResultJson = objectWriter.writeValueAsString(resultJson);
+        } catch (JsonProcessingException e) {
+            System.err.println("Error writing JSON: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return outputResultJson;
+    }
+
+    /**
+     * Generates the statistics parameters in JSON format specific to Sniper
+     * based on the given file path.
+     *
+     * @param filePath the path of the file containing the statistics data
+     * @return the JSON representation of the Sniper-specific statistics parameters
+     */
+    private String generateStatisticsParametersJsonSniper(String filePath) {
+        ObjectNode statistics = objectMapper.createObjectNode();
+        ObjectNode newStatistics = objectMapper.createObjectNode();
+
+        int i = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("|") && !line.contains("Core 0")) {
+                    String[] parts = line.split("\\|");
+                    if (parts.length == 2) {
+                        String key = parts[0];
+                        String value = parts[1].trim();
+                        // Check if the key already exists in the statistics object, and add an index if necessary
+                        key = statistics.has(key) ? key + i++ : key;
+                        statistics.set(key, parseValue(value));
+                    }
+                }
+            }
+
+            newStatistics = getSniperJson(statistics);
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        try {
+            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(newStatistics);
+        } catch (JsonProcessingException e) {
+            System.err.println("Error writing JSON: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+    /**
+     * Generates the Sniper-specific statistics parameters in JSON format based on the given statistics.
+     *
+     * @param statistics The statistics object containing the raw data.
+     * @return The JSON representation of the Sniper-specific statistics parameters.
+     */
+    private ObjectNode getSniperJson(ObjectNode statistics) {
+       ;
+        ObjectNode newStatistics = objectMapper.createObjectNode();
+
+        Iterator<Map.Entry<String, JsonNode>> iterator = statistics.fields();
+        ObjectNode block = objectMapper.createObjectNode();
+        ObjectNode innerBlock = objectMapper.createObjectNode();
+        String key = null;
+        String blockKey = "";
+        String innerBlockKey = "";
+
+        while (iterator.hasNext()) {
+            Map.Entry<String, JsonNode> entry = iterator.next();
+            key = keyWithoutNumber(entry.getKey());
+            JsonNode value = entry.getValue();
+
+            if (key.matches("  [a-zA-Z].*")) {
+                if (blockKey.length() != 0) {
+                    if (value.toString().equals("null")) {
+                        innerBlock = objectMapper.createObjectNode();
+                        innerBlockKey = key.trim();
+                    }
+                    if (innerBlockKey.length() == 0) {
+                        block.set(key.trim(), value);
+                    } else {
+                        block.set(innerBlockKey.trim(), innerBlock);
+                    }
+                } else {
+                    newStatistics.set(key.trim(), value);
+                }
+            } else if (key.matches("[a-zA-Z].*")) {
+                blockKey = key.trim();
+                block = objectMapper.createObjectNode();
+                innerBlock = objectMapper.createObjectNode();
+                innerBlockKey = "";
+                newStatistics.set(blockKey, block);
+            } else if (key.matches("    [a-zA-Z].*")) {
+                innerBlock.set(key.trim(), value);
+            }
+        }
+        return newStatistics;
+    }
+
+    /**
+     * Removes the number from the key if it contains one.
+     *
+     * @param key The key to remove the number from.
+     * @return The key without the number.
+     */
+    private String keyWithoutNumber(String key) {
+        if (key.matches(".*\\s\\d+.*")) {
+            return key.replaceFirst(" \\d+", "");
+        } else {
+            return key;
+        }
+    }
+}
