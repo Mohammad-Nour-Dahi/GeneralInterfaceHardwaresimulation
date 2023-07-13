@@ -1,4 +1,4 @@
-package generalInterfaceHardwaresimulation;
+package org.generalInterfaceHardwaresimulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
