@@ -39,10 +39,16 @@ To run this project, you need to have Java and Maven installed on your system. F
 
 ### Installing Java
 
+
+
 1. Go to the official Java website: [https://www.oracle.com/java/](https://www.oracle.com/java/).
 2. Download the 17th version of Java for your operating system.
 3. Run the installation wizard and follow the instructions to install Java on your system.
-4. After installation, verify the Java version to ensure the installation was successful. Open a terminal or command prompt and enter the command `java -version`. You should see the installed Java version displayed.
+4. Set the `JAVA_HOME` environment variable to the path of the `java-17-openjdk-amd64` directory.
+5. Open a terminal or command prompt.
+6. Enter the command `java -version` to verify the installed Java version. 
+
+By setting the JAVA_HOME variable and checking the Java version, you can ensure that the installation of Java 17 was successful.
 
 ### Installing Maven
 
@@ -57,7 +63,7 @@ To run this project, you need to have Java and Maven installed on your system. F
 
 ## Creating an Input File
  
-- To execute the program, you need to create an input file in JSON format that contains the input parameters for the execution. An example file can be found at src/test/java as [HardwaresimulationParameter.json](/resources/HardwaresimulationParameter.json). You can use this file to run the generic interface.
+- To execute the program, you need to create an input file in JSON format that contains the input parameters for the execution. An example file can be found at resources as [HardwaresimulationParameter.json](/resources/HardwaresimulationParameter.json). You can use this file to run the generic interface.
 
 
 ### Running the Program
@@ -84,7 +90,7 @@ java -jar GeneralInterfaceHardwaresimulation-1.0-SNAPSHOT-jar-with-dependencies.
 
 Replace `<Path to the input.json>` with the actual file path of your JSON input file.
 
-If you want to use the [HardwaresimulationParameter.json](resources/HardwaresimulationParameter.json) file located at src/test/java, you can execute the command as follows:
+If you want to use the [HardwaresimulationParameter.json](resources/HardwaresimulationParameter.json) file located at resources, you can execute the command as follows:
 
 ```bash 
 java -jar GeneralInterfaceHardwaresimulation-1.0-SNAPSHOT-jar-with-dependencies.jar -jsonFile ../resources/HardwaresimulationParameter.json
