@@ -40,7 +40,7 @@ To run this project, you need to have Java and Maven installed on your system. F
 ### Installing Java
 
 1. Go to the official Java website: [https://www.oracle.com/java/](https://www.oracle.com/java/).
-2. Download the 20th version of Java for your operating system.
+2. Download the 17th version of Java for your operating system.
 3. Run the installation wizard and follow the instructions to install Java on your system.
 4. After installation, verify the Java version to ensure the installation was successful. Open a terminal or command prompt and enter the command `java -version`. You should see the installed Java version displayed.
 

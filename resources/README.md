@@ -40,7 +40,7 @@ To run this project, you need to have Java and Maven installed on your system. F
 ### Installing Java
 
 1. Go to the official Java website: [https://www.oracle.com/java/](https://www.oracle.com/java/).
-2. Download the 20th version of Java for your operating system.
+2. Download the 17th version of Java for your operating system.
 3. Run the installation wizard and follow the instructions to install Java on your system.
 4. After installation, verify the Java version to ensure the installation was successful. Open a terminal or command prompt and enter the command `java -version`. You should see the installed Java version displayed.
 
@@ -57,7 +57,7 @@ To run this project, you need to have Java and Maven installed on your system. F
 
 ## Creating an Input File
  
-- To execute the program, you need to create an input file in JSON format that contains the input parameters for the execution. An example file can be found at src/test/java as [HardwaresimulationParameter.json](/resources/HardwaresimulationParameter.json). You can use this file to run the generic interface.
+- To execute the program, you need to create an input file in JSON format that contains the input parameters for the execution. An example file can be found at src/test/java as [HardwaresimulationParameter.json](HardwaresimulationParameter.json). You can use this file to run the generic interface.
 
 
 ### Running the Program
@@ -84,7 +84,7 @@ java -jar GeneralInterfaceHardwaresimulation-1.0-SNAPSHOT-jar-with-dependencies.
 
 Replace `<Path to the input.json>` with the actual file path of your JSON input file.
 
-If you want to use the [HardwaresimulationParameter.json](resources/HardwaresimulationParameter.json) file located at src/test/java, you can execute the command as follows:
+If you want to use the [HardwaresimulationParameter.json](HardwaresimulationParameter.json) file located at src/test/java, you can execute the command as follows:
 
 ```bash 
 java -jar GeneralInterfaceHardwaresimulation-1.0-SNAPSHOT-jar-with-dependencies.jar -jsonFile ../resources/HardwaresimulationParameter.json
