@@ -1,7 +1,7 @@
 {
   "commonParameters": {
     "hardwaresimulation": {
-      "name": "zsim",
+      "name": "gem5",
       "statsOutputPath": "D:/outputStats"
     },
     "cache_hierarchy": {

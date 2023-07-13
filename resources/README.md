@@ -40,7 +40,7 @@ To run this project, you need to have Java and Maven installed on your system. F
 ### Installing Java
 
 1. Go to the official Java website: [https://www.oracle.com/java/](https://www.oracle.com/java/).
-2. Download the latest version of Java for your operating system.
+2. Download the 20th version of Java for your operating system.
 3. Run the installation wizard and follow the instructions to install Java on your system.
 4. After installation, verify the Java version to ensure the installation was successful. Open a terminal or command prompt and enter the command `java -version`. You should see the installed Java version displayed.
 
@@ -57,7 +57,7 @@ To run this project, you need to have Java and Maven installed on your system. F
 
 ## Creating an Input File
  
-- To execute the program, you need to create an input file in JSON format that contains the input parameters for the execution. An example file can be found at src/test/java as [HardwaresimulationParameter.json](HardwaresimulationParameter.json). You can use this file to run the generic interface.
+- To execute the program, you need to create an input file in JSON format that contains the input parameters for the execution. An example file can be found at src/test/java as [HardwaresimulationParameter.json](/resources/HardwaresimulationParameter.json). You can use this file to run the generic interface.
 
 
 ### Running the Program
@@ -70,22 +70,24 @@ To run the program, please follow these steps:
 ```bash
 mvn install
 ```
-Once the project is successfully built, you can execute the program using the following command:
+After running mvn install, a target file will be generated containing the executable program `GeneralInterfaceHardwaresimulation-1.0-SNAPSHOT-jar-with-dependencies.jar`. To execute the program, navigate to the `target` directory by running:
 
 ```bash
-mvn exec:java -Dexec.mainClass=org.generalInterfaceHardwaresimulation.GeneralInterfaceHardwaresimulation -Dexec.args="-jsonFile \"<Path to the input.json>\""
- 
+cd target
 ```
 
-Make sure you have Maven installed on your system before running the command. This command will execute the Java main class `org.generalInterfaceHardwaresimulation.GeneralInterfaceHardwaresimulation` and provide the JSON input file path as the argument.
+Then, enter the following command to start the program:
 
-Replace `"<Path to the input.json>"` with the actual file path of your JSON input file.
+```bash
+java -jar GeneralInterfaceHardwaresimulation-1.0-SNAPSHOT-jar-with-dependencies.jar -jsonFile <Path to the input.json>
+```
 
-If you want to use the [HardwaresimulationParameter.json](HardwaresimulationParameter.json) file located at src/test/java, you can execute the command as follows:
+Replace `<Path to the input.json>` with the actual file path of your JSON input file.
+
+If you want to use the [HardwaresimulationParameter.json](resources/HardwaresimulationParameter.json) file located at src/test/java, you can execute the command as follows:
 
 ```bash 
-mvn exec:java -Dexec.mainClass=org.generalInterfaceHardwaresimulation.GeneralInterfaceHardwaresimulation -Dexec.args="-jsonFile \".\src\test\java\HardwaresimulationParameter.json\""
-
+java -jar GeneralInterfaceHardwaresimulation-1.0-SNAPSHOT-jar-with-dependencies.jar -jsonFile ../resources/HardwaresimulationParameter.json
 ```
 
 
