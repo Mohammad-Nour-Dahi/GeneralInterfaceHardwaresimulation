@@ -21,17 +21,17 @@ public class SniperParser extends ParserInterfaceImplementation {
         super.parse(input);
         init("sniper");
 
-        generateInputParametersFile.generateInputParameters(new SniperInput(), input, "./src/test/java/"+SniperCfg);
+        generateInputParametersFile.generateInputParameters(new SniperInput(), input, "../resources/"+SniperCfg);
 
-        host.inputFileTOContainer(containerId, "./src/test/java/"+SniperCfg, "usr/local/src/sniper/config/");
+        host.inputFileTOContainer(containerId, "../resources/"+SniperCfg, "usr/local/src/sniper/config/");
 
         host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"./run-sniper", "-c", "SniperSilvermont", "/bin/ls"}));
         // host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"cat", "sim.out"}));
 
 
-        host.outputFileFromContainer(containerId, "usr/local/src/sniper/sim.out", "./src/test/java/"+SniperOut);
+        host.outputFileFromContainer(containerId, "usr/local/src/sniper/sim.out", "../resources/"+SniperOut);
 
-        generateOutputParametersFile.generateOutputParameters(new SniperOutput(), "./src/test/java/"+SniperOut, statsOutputPath + "/generatestatsOutputSniper.json");
+        generateOutputParametersFile.generateOutputParameters(new SniperOutput(), "../resources/"+SniperOut, statsOutputPath + "/generatestatsOutputSniper.json");
 
         exit();
     }

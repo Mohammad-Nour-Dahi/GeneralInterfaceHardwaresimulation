@@ -99,7 +99,7 @@ public class GeneralInterfaceHardwaresimulation {
         String readmeContent = "";
 
         try {
-            File readmeFile = new File("README.md");
+            File readmeFile = new File("../resources/README.md");
             readmeContent = FileUtils.readFileToString(readmeFile, "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();

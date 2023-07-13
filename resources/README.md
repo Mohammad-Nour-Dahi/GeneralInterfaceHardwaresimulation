@@ -57,7 +57,7 @@ To run this project, you need to have Java and Maven installed on your system. F
 
 ## Creating an Input File
  
-- To execute the program, you need to create an input file in JSON format that contains the input parameters for the execution. An example file can be found at src/test/java as [HardwaresimulationParameter.json](src/test/java/HardwaresimulationParameter.json). You can use this file to run the generic interface.
+- To execute the program, you need to create an input file in JSON format that contains the input parameters for the execution. An example file can be found at src/test/java as [HardwaresimulationParameter.json](HardwaresimulationParameter.json). You can use this file to run the generic interface.
 
 
 ### Running the Program
@@ -81,7 +81,7 @@ Make sure you have Maven installed on your system before running the command. Th
 
 Replace `"<Path to the input.json>"` with the actual file path of your JSON input file.
 
-If you want to use the [HardwaresimulationParameter.json](src/test/java/HardwaresimulationParameter.json) file located at src/test/java, you can execute the command as follows:
+If you want to use the [HardwaresimulationParameter.json](HardwaresimulationParameter.json) file located at src/test/java, you can execute the command as follows:
 
 ```bash 
 mvn exec:java -Dexec.mainClass=org.generalInterfaceHardwaresimulation.GeneralInterfaceHardwaresimulation -Dexec.args="-jsonFile \".\src\test\java\HardwaresimulationParameter.json\""

@@ -15,9 +15,9 @@ public class ZsimParser extends ParserInterfaceImplementation {
         String zsim_out = "zsim.out";
         init("zsim");
 
-        generateInputParametersFile.generateInputParameters(new ZsimInput(), input, "./src/test/java/" + generateHardwaresimulationParameter);
+        generateInputParametersFile.generateInputParameters(new ZsimInput(), input, "../resources/" + generateHardwaresimulationParameter);
 
-        hardwaresimulation.inputFileTOContainer(containerId, "./src/test/java/" + generateHardwaresimulationParameter, "/usr/local/src/zsim-plusplus/tests/");
+        hardwaresimulation.inputFileTOContainer(containerId, "../resources/" + generateHardwaresimulationParameter, "/usr/local/src/zsim-plusplus/tests/");
 
         host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"echo", "0", "|", "sudo", "tee", "/proc/sys/kernel/randomize_va_space"}));
 
@@ -28,8 +28,8 @@ public class ZsimParser extends ParserInterfaceImplementation {
         // host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"cat", "/usr/local/src/zsim-plusplus/zsim.out"}));
 
 
-        hardwaresimulation.outputFileFromContainer(containerId,"/usr/local/src/zsim-plusplus/zsim.out","./src/test/java/" + zsim_out);
-        generateOutputParametersFile.generateOutputParameters(new ZsimOutput(), "./src/test/java/" + zsim_out, statsOutputPath + "/generatestatsOutputZsim.json");
+        hardwaresimulation.outputFileFromContainer(containerId,"/usr/local/src/zsim-plusplus/zsim.out","../resources/" + zsim_out);
+        generateOutputParametersFile.generateOutputParameters(new ZsimOutput(), "../resources/" + zsim_out, statsOutputPath + "/generatestatsOutputZsim.json");
 
         exit();
 

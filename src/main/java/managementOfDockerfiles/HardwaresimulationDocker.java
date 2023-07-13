@@ -48,7 +48,7 @@ public class HardwaresimulationDocker {
      * @param imageName the name of the hardwaresimulation image
      */
     private void hardwaresimulationbuildImage(String imageName) {
-        BuildImageCmd buildImageCmd = dockerClient.buildImageCmd(new File("./src/dockerfiles/" + imageName + "/Dockerfile"))
+        BuildImageCmd buildImageCmd = dockerClient.buildImageCmd(new File("../resources/dockerfiles/" + imageName + "/Dockerfile"))
                 .withTags(Collections.singleton(imageName));
 
         BuildImageResultCallback callback = new BuildImageResultCallback() {

@@ -17,7 +17,7 @@ public class Gem5Parser extends ParserInterfaceImplementation {
     @Override
     public void parse(JsonNode input) {
         super.parse(input);
-        String generateHardwaresimulationInputParametersPath = "./src/test/java/generateGem5Parameter.py";
+        String generateHardwaresimulationInputParametersPath = "../resources/generateGem5Parameter.py";
 
         String gem5Stats = "gem5Stats.txt";
 
@@ -33,9 +33,9 @@ public class Gem5Parser extends ParserInterfaceImplementation {
 
 
 
-        host.outputFileFromContainer(containerId, "usr/local/src/gem5/m5out/" + gem5Stats, "./src/test/java/" + gem5Stats);
+        host.outputFileFromContainer(containerId, "usr/local/src/gem5/m5out/" + gem5Stats, "../resources/" + gem5Stats);
 
-        generateOutputParametersFile.generateOutputParameters(new Gem5Output(), "./src/test/java/" + gem5Stats, statsOutputPath +"/generatestatsOutputGem5.json");
+        generateOutputParametersFile.generateOutputParameters(new Gem5Output(), "../resources/" + gem5Stats, statsOutputPath +"/generatestatsOutputGem5.json");
 
         exit();
 
