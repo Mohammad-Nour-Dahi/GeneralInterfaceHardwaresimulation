@@ -2,8 +2,18 @@ package input;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
+/**
+ * The Gem5Input class implements the GenerateInputParameters interface to generate input code
+ * for the Gem5 simulator based on the provided JSON data.
+ */
 public class Gem5Input implements GenerateInputParameters {
+
+    /**
+     * Generates input code for the Gem5 simulator based on the provided JSON data.
+     *
+     * @param jsonData The JSON data used to generate the input code.
+     * @return The generated input code as a String.
+     */
     @Override
     public String generateInputCode(JsonNode jsonData) {
         JsonNode cacheHierarchy =  jsonData.get("commonParameters").get("cache_hierarchy");
