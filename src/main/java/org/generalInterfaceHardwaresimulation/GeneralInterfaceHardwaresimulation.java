@@ -19,12 +19,11 @@ import java.io.IOException;
 public class GeneralInterfaceHardwaresimulation {
 
     /**
-     * Runs the hardware simulation program based on the provided command line arguments.
+     * Runs the simulation based on the command line arguments.
      *
-     * @param args the command line arguments
+     * @param args The command line arguments.
      */
     public void simulation(String[] args) {
-        ParserInterface parserStrategy;
         Options options = createOptions();
 
         CommandLineParser parser = new DefaultParser();
@@ -35,40 +34,7 @@ public class GeneralInterfaceHardwaresimulation {
                 printHelp(options);
             } else if (cmd.hasOption("jsonFile")) {
                 String jsonFilePath = cmd.getOptionValue("jsonFile");
-
-                try {
-                    // Read JSON file
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    JsonNode rootNode = objectMapper.readTree(new File(jsonFilePath));
-
-                    // Check the value for "hardwaresimulation.name"
-                    if (JsonNodeALL.hasALL(rootNode,"commonParameters.hardwaresimulation.name")) {
-                        String hardwareSimulationName = JsonNodeALL.getALL(rootNode,"commonParameters.hardwaresimulation.name").asText();
-
-                        // Perform different actions based on the value of "hardwareSimulationName"
-                        switch (hardwareSimulationName) {
-                            case "gem5":
-                                parserStrategy = new Gem5Parser();
-                                parserStrategy.parse(rootNode);
-                                break;
-                            case "sniper":
-                                parserStrategy = new SniperParser();
-                                parserStrategy.parse(rootNode);
-                                break;
-                            case "zsim":
-                                parserStrategy = new ZsimParser();
-                                parserStrategy.parse(rootNode);
-                                break;
-                            default:
-                                System.out.println("Invalid value for 'commonParameters.hardwaresimulation.name' in the JSON file.");
-                                break;
-                        }
-                    } else {
-                        System.out.println("The key 'commonParameters.hardwaresimulation.name' was not found in the JSON file.");
-                    }
-                } catch (IOException e) {
-                    System.out.println("Error reading the JSON file: " + e.getMessage());
-                }
+                processJsonFile(jsonFilePath);
             } else {
                 System.out.println("The 'jsonFile' option was not specified. Use the 'help' option for more information.");
             }
@@ -76,6 +42,55 @@ public class GeneralInterfaceHardwaresimulation {
             System.out.println("Error parsing the command line arguments: " + e.getMessage());
         }
     }
+
+    /**
+     * Processes the JSON file and performs actions based on the content.
+     *
+     * @param jsonFilePath The path to the JSON file.
+     */
+    private void processJsonFile(String jsonFilePath) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(new File(jsonFilePath));
+
+            if (JsonNodeALL.hasALL(rootNode, "commonParameters.hardwaresimulation.name")) {
+                String hardwareSimulationName = JsonNodeALL.getALL(rootNode, "commonParameters.hardwaresimulation.name").asText();
+
+                performActionsBasedOnSimulationName(hardwareSimulationName, rootNode);
+            } else {
+                System.out.println("The key 'commonParameters.hardwaresimulation.name' was not found in the JSON file.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading the JSON file: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Performs different actions based on the hardware simulation name.
+     *
+     * @param hardwareSimulationName The name of the hardware simulation.
+     * @param rootNode              The root node of the JSON tree.
+     */
+    private void performActionsBasedOnSimulationName(String hardwareSimulationName, JsonNode rootNode) {
+        ParserInterface parserStrategy;
+        switch (hardwareSimulationName) {
+            case "gem5":
+                parserStrategy = new Gem5Parser();
+                break;
+            case "sniper":
+                parserStrategy = new SniperParser();
+                break;
+            case "zsim":
+                parserStrategy = new ZsimParser();
+                break;
+            default:
+                System.out.println("Invalid value for 'commonParameters.hardwaresimulation.name' in the JSON file.");
+                return;
+        }
+
+        parserStrategy.parse(rootNode);
+    }
+
 
     /**
      * Creates the command line options for the program.
