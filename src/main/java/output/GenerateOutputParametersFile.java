@@ -28,7 +28,7 @@ public class GenerateOutputParametersFile {
     public void generateOutputParameters(GenerateOutputParameters generateOutputParameters, String generateHardwareSimulationOutputParametersPath, String generateJsonPath) {
         String jsonOutputParameter = generateOutputParameters.generateStatisticsParametersJson(generateHardwareSimulationOutputParametersPath);
         String sortedJsonOutputParameter = sortJsonOutputParameter(jsonOutputParameter);
-        System.out.println("---------- outputStats ----------\n" + sortedJsonOutputParameter);
+        System.out.println("---------- outputStats ----------\n" + sortedJsonOutputParameter +"\n---------- END ----------");
         saveJsonToFile(sortedJsonOutputParameter, generateJsonPath);
     }
 

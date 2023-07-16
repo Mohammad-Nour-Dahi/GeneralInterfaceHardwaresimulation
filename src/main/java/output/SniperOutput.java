@@ -21,16 +21,10 @@ import java.util.*;
 public class SniperOutput extends GenerateOutputParametersImplements {
     // List of parameter names to be included in the output JSON
     List<String> parameterList = new ArrayList<>(Arrays.asList(
-            "Time (ns)", "Instructions", "Cycles",
-            "Branch predictor stats.num correct",
-            "TLB Summary.I-TLB.num misses",
-            "TLB Summary.D-TLB.num accesses",
+            "Time (ns)", "Instructions", "Cycles", "IPC",
             "Cache Summary.Cache L1-I.num cache misses",
-            "TLB Summary.D-TLB.num misses",
             "Cache Summary.Cache L1-D.num cache accesses",
-            "Branch predictor stats.num incorrect",
             "Cache Summary.Cache L2.num cache misses",
-            "TLB Summary.I-TLB.num accesses",
             "Cache Summary.Cache L1-I.num cache accesses",
             "Cache Summary.Cache L1-D.num cache misses",
             "Cache Summary.Cache L2.num cache accesses",
@@ -52,7 +46,7 @@ public class SniperOutput extends GenerateOutputParametersImplements {
     @Override
     public String generateStatisticsParametersJson(String filePath) {
         JsonNode generateHardwaresimulationOutputParametersJson = objectMapper.createObjectNode();
-        ObjectNode resultJson= objectMapper.createObjectNode();
+        ObjectNode resultJson = objectMapper.createObjectNode();
         String outputResultJson = "";
         String generateHardwaresimulationOutputParameters = generateStatisticsParametersJsonSniper(filePath);
         try {
@@ -66,7 +60,15 @@ public class SniperOutput extends GenerateOutputParametersImplements {
         for (String parameter : parameterList) {
             if (JsonNodeALL.hasALL(generateHardwaresimulationOutputParametersJson, parameter)) {
                 JsonNode value = JsonNodeALL.getALL(generateHardwaresimulationOutputParametersJson, parameter);
-                resultJson.set(parameter, value);
+                //Adds a percent symbol (%) to the value of a parameter that ends with "rate".
+                if (parameter.endsWith("rate")) {
+                    String valueWithPercent = value.asText() + "%";
+                    resultJson.put(parameter, valueWithPercent);
+                } else {
+                    resultJson.set(parameter, value);
+                }
+
+
             }
         }
 
@@ -123,6 +125,7 @@ public class SniperOutput extends GenerateOutputParametersImplements {
             return null;
         }
     }
+
     /**
      * Generates the Sniper-specific statistics parameters in JSON format based on the given statistics.
      *
@@ -130,7 +133,7 @@ public class SniperOutput extends GenerateOutputParametersImplements {
      * @return The JSON representation of the Sniper-specific statistics parameters.
      */
     private ObjectNode getSniperJson(ObjectNode statistics) {
-       ;
+        ;
         ObjectNode newStatistics = objectMapper.createObjectNode();
 
         Iterator<Map.Entry<String, JsonNode>> iterator = statistics.fields();
@@ -172,17 +175,5 @@ public class SniperOutput extends GenerateOutputParametersImplements {
         return newStatistics;
     }
 
-    /**
-     * Removes the number from the key if it contains one.
-     *
-     * @param key The key to remove the number from.
-     * @return The key without the number.
-     */
-    private String keyWithoutNumber(String key) {
-        if (key.matches(".*\\s\\d+.*")) {
-            return key.replaceFirst(" \\d+", "");
-        } else {
-            return key;
-        }
-    }
+
 }

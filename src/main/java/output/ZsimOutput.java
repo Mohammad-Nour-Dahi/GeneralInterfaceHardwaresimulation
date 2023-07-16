@@ -10,39 +10,92 @@ import managementOFJsonNodeALL.JsonNodeALL;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 
 /**
  * ZsimOutput class extends GenerateOutputParametersImplements and represents a class for generating Zsim output.
  */
 public class ZsimOutput extends GenerateOutputParametersImplements {
-
-    // Mapping of parameter keys to output parameter names
+    /**
+     * Mapping of parameter keys to output parameter names
+     */
     private Map<String, String> parameterMap = new HashMap<>(Map.of(
             "root.skylake.skylake-0.instrs", "Instructions",
             "root.skylake.skylake-0.cycles", "Cycles",
-            "root.contention.domain-0.time", "Time (ns)",
-            "root.skylake.skylake-0.mispredBranches", "Branch predictor stats.misprediction rate"
+            "root.contention.domain-0.time", "Time (ns)"
+
     ));
 
     /**
-     *
+     * List of cache miss values for Cache Summary.Cache L1-D.
+     */
+    private List<String> cacheSummaryCacheL1DNumCacheMisses;
+    /**
+     * List of cache miss values for Cache Summary.Cache L1-I.
+     */
+    private List<String> cacheSummaryCacheL1INumCacheMisses;
+    /**
+     * List of cache miss values for Cache Summary.Cache L2.
+     */
+    private List<String> cacheSummaryCacheL2NumCacheMisses;
+
+    /**
      * Initializes the parameter map with additional mappings.
      */
     public ZsimOutput() {
-        parameterMap.put("board.cache_hierarchy.ruby_system.l1_controllers1.L1Icache.m_demand_accesses", "Cache Summary.Cache L1-I.num cache accesses");
-        parameterMap.put("board.cache_hierarchy.ruby_system.l1_controllers0.L1Icache.m_demand_misses", "Cache Summary.Cache L1-I.num cache misses");
-        parameterMap.put("root.l1i.l1i-0.mGETS", "Cache Summary.Cache L1-I.num cache misses");
-        parameterMap.put("board.cache_hierarchy.ruby_system.l1_controllers0.L1Dcache.m_demand_accesses", "Cache Summary.Cache L1-D.num cache accesses");
-        parameterMap.put("board.cache_hierarchy.ruby_system.l1_controllers1.L1Dcache.m_demand_accesses", "Cache Summary.Cache L1-D.num cache accesses");
-        parameterMap.put("root.l1d.l1d-0.mGETS", "Cache Summary.Cache L1-D.num cache misses");
-        parameterMap.put("board.cache_hierarchy.ruby_system.l1_controllers1.L1Dcache.m_demand_misses", "Cache Summary.Cache L1-D.num cache misses");
-        parameterMap.put("board.cache_hierarchy.ruby_system.l2_controllers.L2cache.m_demand_accesses", "Cache Summary.Cache L2.num cache accesses");
-        parameterMap.put("root.l2.l2-0.mGETS", "Cache Summary.Cache L2.num cache misses");
+
+        // The value of "Cache Summary.Cache L1-D.num cache accesses" is the sum of these keys: fhGETS fhGETX hGETS hGETX mGETS mGETXIM mGETXSM
+        parameterMap.put("root.l1d.l1d-0.fhGETS", "Cache Summary.Cache L1-D.num cache accesses");
+        parameterMap.put("root.l1d.l1d-0.fhGETX", "Cache Summary.Cache L1-D.num cache accesses");
+        parameterMap.put("root.l1d.l1d-0.hGETS", "Cache Summary.Cache L1-D.num cache accesses");
+        parameterMap.put("root.l1d.l1d-0.hGETX", "Cache Summary.Cache L1-D.num cache accesses");
+        parameterMap.put("root.l1d.l1d-0.mGETS", "Cache Summary.Cache L1-D.num cache accesses");
+        parameterMap.put("root.l1d.l1d-0.mGETXIM", "Cache Summary.Cache L1-D.num cache accesses");
+        parameterMap.put("root.l1d.l1d-0.mGETXSM", "Cache Summary.Cache L1-D.num cache accesses");
+
+        // The value of "Cache Summary.Cache L1-D.num cache misses" is the sum of these keys:  mGETS mGETXIM mGETXSM
+        cacheSummaryCacheL1DNumCacheMisses = Arrays.asList(
+                "root.l1d.l1d-0.mGETS",
+                "root.l1d.l1d-0.mGETXIM",
+                "root.l1d.l1d-0.mGETXSM"
+        );
+
+
+        // The value of "Cache Summary.Cache L1-I.num cache accesses" is the sum of these keys: fhGETS fhGETX hGETS hGETX mGETS mGETXIM mGETXSM
+        parameterMap.put("root.l1i.l1i-0.fhGETS", "Cache Summary.Cache L1-I.num cache accesses");
+        parameterMap.put("root.l1i.l1i-0.fhGETX", "Cache Summary.Cache L1-I.num cache accesses");
+        parameterMap.put("root.l1i.l1i-0.hGETS", "Cache Summary.Cache L1-I.num cache accesses");
+        parameterMap.put("root.l1i.l1i-0.hGETX", "Cache Summary.Cache L1-I.num cache accesses");
+        parameterMap.put("root.l1i.l1i-0.mGETS", "Cache Summary.Cache L1-I.num cache accesses");
+        parameterMap.put("root.l1i.l1i-0.mGETXIM", "Cache Summary.Cache L1-I.num cache accesses");
+        parameterMap.put("root.l1i.l1i-0.mGETXSM", "Cache Summary.Cache L1-I.num cache accesses");
+
+
+        // The value of "Cache Summary.Cache L1-I.num cache misses" is the sum of these keys:  mGETS mGETXIM mGETXSM
+        cacheSummaryCacheL1INumCacheMisses = Arrays.asList(
+                "root.l1i.l1i-0.mGETS",
+                "root.l1i.l1i-0.mGETXIM",
+                "root.l1i.l1i-0.mGETXSM"
+        );
+
+        // The value of "Cache Summary.Cache L2.num cache accesses" is the sum of these keys: hGETS hGETX mGETS mGETXIM mGETXSM
+        parameterMap.put("root.l2.l2-0.hGETS", "Cache Summary.Cache L2.num cache accesses");
+        parameterMap.put("root.l2.l2-0.hGETX", "Cache Summary.Cache L2.num cache accesses");
+        parameterMap.put("root.l2.l2-0.mGETS", "Cache Summary.Cache L2.num cache accesses");
+        parameterMap.put("root.l2.l2-0.mGETXIM", "Cache Summary.Cache L2.num cache accesses");
+        parameterMap.put("root.l2.l2-0.mGETXSM", "Cache Summary.Cache L2.num cache accesses");
+
+
+        // The value of "Cache Summary.Cache L2.num cache misses" is the sum of these keys:  mGETS mGETXIM mGETXSM
+        cacheSummaryCacheL2NumCacheMisses = Arrays.asList(
+                "root.l2.l2-0.mGETS",
+                "root.l2.l2-0.mGETXIM",
+                "root.l2.l2-0.mGETXSM"
+        );
+
     }
+
 
     /**
      * Generate a JSON parameter that uses a specified file path.
@@ -54,10 +107,10 @@ public class ZsimOutput extends GenerateOutputParametersImplements {
      */
     @Override
     public String generateStatisticsParametersJson(String filePath) {
-        ObjectNode resultJson= objectMapper.createObjectNode();
+        ObjectNode resultJson = objectMapper.createObjectNode();
         String outputResultJson = "";
         // Generate the initial JSON object
-        JsonNode jsonObject = generateStatisticsJsonZsim(filePath);
+        ObjectNode jsonObject = generateStatisticsJsonZsim(filePath);
 
         // Iterate over the parameterMap and update the resultJson with matching values from the jsonObject
         parameterMap.forEach((key, outputParameter) -> {
@@ -66,8 +119,15 @@ public class ZsimOutput extends GenerateOutputParametersImplements {
                 resultJson.set(outputParameter, value);
             }
         });
+        // Num cache misses
+        addKeysWithSameValue(cacheSummaryCacheL1DNumCacheMisses, "Cache Summary.Cache L1-D.num cache misses",
+                jsonObject, resultJson);
+        addKeysWithSameValue(cacheSummaryCacheL1INumCacheMisses, "Cache Summary.Cache L1-I.num cache misses",
+                jsonObject, resultJson);
+        addKeysWithSameValue(cacheSummaryCacheL2NumCacheMisses, "Cache Summary.Cache L2.num cache misses",
+                jsonObject, resultJson);
 
-
+        calculateSimulationResultGem5AndZsim(parameterMap, jsonObject, resultJson);
         try {
             // Create an ObjectWriter with indentation enabled
             ObjectWriter objectWriter = objectMapper.writer().with(SerializationFeature.INDENT_OUTPUT);
@@ -85,7 +145,7 @@ public class ZsimOutput extends GenerateOutputParametersImplements {
      * @param filePath The path to the file containing statistics data.
      * @return A JSON object representing the statistics data.
      */
-    private JsonNode generateStatisticsJsonZsim(String filePath) {
+    private ObjectNode generateStatisticsJsonZsim(String filePath) {
         // Create the initial statistics and newStatistics objects
         ObjectNode statistics = objectMapper.createObjectNode();
         ObjectNode newStatistics = objectMapper.createObjectNode();
@@ -108,7 +168,7 @@ public class ZsimOutput extends GenerateOutputParametersImplements {
                     String key = parts[0];
                     String value = parts[1].trim();
                     // Check if the key already exists in the statistics object, and add an index if necessary
-                    key = statistics.has(key) ? key + i++ : key;
+                    key = statistics.has(key) ? key + " " + i++ : key;
 
                     // Parse the value and add it to the statistics object
                     statistics.set(key, parseValue(value));
@@ -117,6 +177,7 @@ public class ZsimOutput extends GenerateOutputParametersImplements {
 
             // Generate the newStatistics object using the statistics object
             newStatistics = getZsimJson(statistics);
+
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
             e.printStackTrace();
@@ -186,7 +247,7 @@ public class ZsimOutput extends GenerateOutputParametersImplements {
                 innerBlockKey = "";
                 newStatistics.set(blockKey, block);
             } else if (key.matches("   [a-zA-Z].*")) {
-                innerInnerBlock.set(key.trim(), value);
+                innerInnerBlock.set(keyWithoutNumber(key).trim(), value);
             }
         }
 
