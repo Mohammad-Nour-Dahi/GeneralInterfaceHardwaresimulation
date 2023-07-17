@@ -24,12 +24,13 @@ public class Gem5Parser extends ParserInterfaceImplementation {
         init("gem5");
 
 
-        generateInputParametersFile.generateInputParameters(new Gem5Input(), input, generateHardwaresimulationInputParametersPath);
+        generateInputParametersFile.generateInputParameters(new Gem5Input(input),  generateHardwaresimulationInputParametersPath);
 
         host.inputFileTOContainer(containerId, generateHardwaresimulationInputParametersPath, "usr/local/src/gem5/configs/learning_gem5/part1/");
 
-        host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"build/X86/gem5.opt", "--stats-file=" + gem5Stats, "configs/learning_gem5/part1/generateGem5Parameter.py"}));
+        String outputConsole = host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"build/X86/gem5.opt", "--stats-file=" + gem5Stats, "configs/learning_gem5/part1/generateGem5Parameter.py"}));
         //host.outputFromHardwaresimulationConsole( hardwaresimulation.command(new String[]{"cat", "m5out/" + gem5Stats}));
+        handleOutputConsole(outputConsole);
 
 
 
@@ -40,4 +41,17 @@ public class Gem5Parser extends ParserInterfaceImplementation {
         exit();
 
     }
+    /**
+     * Handles the output console and performs error handling based on its content.
+     *
+     * @param outputConsole The output console string.
+     */
+    private void handleOutputConsole(String outputConsole) {
+        if (outputConsole.contains("AttributeError")) {
+            System.err.println("AttributeError encountered. Exiting the program.");
+            exit();
+            System.exit(1);
+        }
+    }
+
 }

@@ -88,8 +88,6 @@ public class HardwaresimulationDocker {
                 .exec();
         containerId = containerResponse.getId();
 
-
-        containerId = containerResponse.getId();
     }
 
     /**
@@ -138,12 +136,14 @@ public class HardwaresimulationDocker {
                 .getId();
     }
 
+
     /**
-     * Prints the output of the command from the hardware simulation console with the specified execution ID.
+     * Retrieves the output of the command from the hardware simulation console with the specified execution ID.
      *
-     * @param execId the execution ID of the command
+     * @param execId The execution ID of the command.
+     * @return The output of the command as a string.
      */
-    public void outputFromHardwaresimulationConsole(String execId) {
+    public String outputFromHardwaresimulationConsole(String execId) {
         try {
             StringBuilder outputBuffer = new StringBuilder();
 
@@ -163,23 +163,21 @@ public class HardwaresimulationDocker {
 
             // Print the command output
             System.out.println("Command output: " + output);
+            return output;
         } catch (InterruptedException e) {
             // Handle the interruption
             e.printStackTrace();
+            return null;
         }
     }
-
-
-
-
 
 
     /**
      * Copies a file from the container to the host.
      *
-     * @param containerId      the ID of the container
+     * @param containerId       the ID of the container
      * @param containerFilePath the path of the file in the container
-     * @param hostFilePath     the path of the file on the host
+     * @param hostFilePath      the path of the file on the host
      */
     public void outputFileFromContainer(String containerId, String containerFilePath, String hostFilePath) {
         CopyArchiveFromContainerCmd copyFromCmd = dockerClient.copyArchiveFromContainerCmd(containerId, containerFilePath);
@@ -207,8 +205,8 @@ public class HardwaresimulationDocker {
     /**
      * Copies a file from the host to the container.
      *
-     * @param containerId      the ID of the container
-     * @param hostFilePath     the path of the file on the host
+     * @param containerId       the ID of the container
+     * @param hostFilePath      the path of the file on the host
      * @param containerFilePath the path of the file in the container
      */
     public void inputFileTOContainer(String containerId, String hostFilePath, String containerFilePath) {
@@ -231,6 +229,7 @@ public class HardwaresimulationDocker {
 
     /**
      * Stops the Docker hardwaresimulation container with the given container ID.
+     *
      * @param containerId the ID of the container to close
      */
     public void closeDockerHardwaresimulation(String containerId) {

@@ -15,7 +15,7 @@ public class ZsimParser extends ParserInterfaceImplementation {
         String zsim_out = "zsim.out";
         init("zsim");
 
-        generateInputParametersFile.generateInputParameters(new ZsimInput(), input, "../resources/" + generateHardwaresimulationParameter);
+        generateInputParametersFile.generateInputParameters(new ZsimInput(input),  "../resources/" + generateHardwaresimulationParameter);
 
         hardwaresimulation.inputFileTOContainer(containerId, "../resources/" + generateHardwaresimulationParameter, "/usr/local/src/zsim-plusplus/tests/");
 
@@ -23,7 +23,9 @@ public class ZsimParser extends ParserInterfaceImplementation {
 
         host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"scons", "-j16"}));
 
-        host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"./build/opt/zsim", "tests/" + generateHardwaresimulationParameter}));
+        String outputConsole=   host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"./build/opt/zsim", "tests/" + generateHardwaresimulationParameter}));
+
+        handleOutputConsole(outputConsole);
 
         // host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"cat", "/usr/local/src/zsim-plusplus/zsim.out"}));
 
@@ -33,6 +35,34 @@ public class ZsimParser extends ParserInterfaceImplementation {
 
         exit();
 
+    }
+    /**
+     * Handles the output console and performs error handling based on its content.
+     *
+     * @param outputConsole The output console string.
+     */
+    private void handleOutputConsole(String outputConsole) {
+        if (outputConsole.contains("Bank size must be a multiple of line size")) {
+            System.err.println("Bank size must be a multiple of line size encountered. Exiting the program.");
+            exit();
+            System.exit(1);
+        } else if (outputConsole.contains("Number of sets must be a power of two")) {
+            System.err.println("Number of sets must be a power of two encountered. Exiting the program.");
+            exit();
+            System.exit(1);
+        } else if (outputConsole.contains("error: syntax error")) {
+            System.err.println("Syntax error encountered. Exiting the program.");
+            exit();
+            System.exit(1);
+        } else if (outputConsole.contains("Unsupported line size")) {
+            System.err.println("Unsupported line size encountered. Exiting the program.");
+            exit();
+            System.exit(1);
+        } else if (outputConsole.contains("can't connect more cores to it")) {
+            System.err.println("Can't connect more cores to it encountered. Exiting the program.");
+            exit();
+            System.exit(1);
+        }
     }
 
 

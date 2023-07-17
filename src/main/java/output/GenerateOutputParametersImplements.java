@@ -11,16 +11,20 @@ import java.util.Map;
 
 
 /**
- * GenerateOutputParametersImplements is a class that implements the GenerateOutputParameters interface.
+ * GenerateOutputParametersImplements is an abstract class that implements the GenerateOutputParameters interface.
  * It provides basic functionality for generating output parameters in JSON format.
  */
-public class GenerateOutputParametersImplements implements GenerateOutputParameters {
+public abstract class GenerateOutputParametersImplements implements GenerateOutputParameters {
+    /**
+     * The objectMapper field is an instance of the ObjectMapper class from the Jackson library,
+     * which is used for converting Java objects to JSON strings.
+     */
     protected ObjectMapper objectMapper;
 
 
     /**
      * Default constructor for GenerateOutputParametersImplements.
-     * Initializes the ObjectMapper, jsonObject, and resultJson.
+     * Initializes the ObjectMapper.
      */
     GenerateOutputParametersImplements() {
         objectMapper = new ObjectMapper();
@@ -36,9 +40,7 @@ public class GenerateOutputParametersImplements implements GenerateOutputParamet
      * @return A formatted JSON string representing the statistics parameters.
      */
     @Override
-    public String generateStatisticsParametersJson(String filePath) {
-        return null;
-    }
+    public abstract String generateStatisticsParametersJson(String filePath);
 
     /**
      * Parse a value into a JsonNode based on its data type.
@@ -123,18 +125,14 @@ public class GenerateOutputParametersImplements implements GenerateOutputParamet
      * @param resultJson      The ObjectNode representing the result JSON.
      */
     protected void calculateMPKI(String instructionsKey, String numMissesKey, String mpkiKey, ObjectNode resultJson) {
-        JsonNode instructionsNode = resultJson.get(instructionsKey);
-        JsonNode numMissesNode = resultJson.get(numMissesKey);
 
-        if (instructionsNode != null && numMissesNode != null) {
-            int numInstructions = instructionsNode.asInt();
-            int numCacheMisses = numMissesNode.asInt();
+            int numInstructions = findPropertyValue(resultJson,instructionsKey).asInt();
+            int numCacheMisses = findPropertyValue(resultJson,numMissesKey).asInt();
 
             double mpki = ((double) numCacheMisses / numInstructions) * 1000;
 
-
             resultJson.put(mpkiKey, roundToTwoDecimals(mpki));
-        }
+
     }
 
     /**
@@ -149,7 +147,14 @@ public class GenerateOutputParametersImplements implements GenerateOutputParamet
         resultJson.put(rateKey, roundToTwoDecimals(divideNumbers(cacheAccessesKey, cacheMissesKey, resultJson)) + "%");
 
     }
-
+    /**
+     * Divides two numbers and returns the result.
+     *
+     * @param numeratorKey   The key to retrieve the numerator value from the JSON object.
+     * @param denominatorKey The key to retrieve the denominator value from the JSON object.
+     * @param resultJson     The JSON object containing the values.
+     * @return The result of dividing the numerator by the denominator. If the denominator is 0, returns 0.00.
+     */
     protected double divideNumbers(String numeratorKey, String denominatorKey, ObjectNode resultJson) {
 
         double result = 0.00;
@@ -161,7 +166,6 @@ public class GenerateOutputParametersImplements implements GenerateOutputParamet
             result = numerator / denominator;
 
         }
-
 
         return result;
     }

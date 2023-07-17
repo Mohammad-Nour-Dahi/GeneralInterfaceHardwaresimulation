@@ -21,13 +21,13 @@ public class SniperParser extends ParserInterfaceImplementation {
         super.parse(input);
         init("sniper");
 
-        generateInputParametersFile.generateInputParameters(new SniperInput(), input, "../resources/"+SniperCfg);
+        generateInputParametersFile.generateInputParameters(new SniperInput(input), "../resources/"+SniperCfg);
 
         host.inputFileTOContainer(containerId, "../resources/"+SniperCfg, "usr/local/src/sniper/config/");
 
-        host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"./run-sniper", "-c", "SniperSilvermont", "/bin/ls"}));
+        String outputConsole=  host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"./run-sniper", "-c", "SniperSilvermont", "/bin/ls"}));
         // host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"cat", "sim.out"}));
-
+        handleOutputConsole(outputConsole);
 
         host.outputFileFromContainer(containerId, "usr/local/src/sniper/sim.out", "../resources/"+SniperOut);
 
@@ -35,4 +35,34 @@ public class SniperParser extends ParserInterfaceImplementation {
 
         exit();
     }
+    /**
+     * Handles the output console and performs error handling based on its content.
+     *
+     * @param outputConsole The output console string.
+     */
+    private void handleOutputConsole(String outputConsole) {
+        if (outputConsole.contains("Invalid cache configuration")) {
+            System.err.println("Invalid cache configuration encountered. Exiting the program.");
+            exit();
+            System.exit(1);
+        }else if (outputConsole.contains("Caches of non-power of 2 size")) {
+            System.err.println("Caches of non-power of 2 size encountered. Exiting the program.");
+            exit();
+            System.exit(1);
+        }else if (outputConsole.contains("*** Configuration error ***")) {
+            System.err.println("Configuration error encountered. Exiting the program.");
+            exit();
+            System.exit(1);
+        }else if (outputConsole.contains("ERROR")) {
+            System.err.println("ERROR encountered. Exiting the program.");
+            exit();
+            System.exit(1);
+        }else if (outputConsole.contains("Error")) {
+            System.err.println("ERROR encountered. Exiting the program.");
+            exit();
+            System.exit(1);
+        }
+
+    }
+
 }
