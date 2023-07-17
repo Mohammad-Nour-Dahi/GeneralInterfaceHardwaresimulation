@@ -1,44 +1,37 @@
 package input;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import managementOFJsonNodeALL.JsonNodeALL;
+
 /**
  * The Gem5Input class implements the GenerateInputParameters interface to generate input code
  * for the Gem5 simulator based on the provided JSON data.
  */
-public class Gem5Input implements GenerateInputParameters {
+public class Gem5Input extends GenerateInputParametersImplementation {
+    /**
+
+     Constructs a new instance of the Gem5Input class.
+
+     @param parametersFormInputJSON The input JSON node.
+     */
+    public Gem5Input(JsonNode parametersFormInputJSON) {
+        super(parametersFormInputJSON);
+    }
 
     /**
      * Generates input code for the Gem5 simulator based on the provided JSON data.
      *
-     * @param jsonData The JSON data used to generate the input code.
      * @return The generated input code as a String.
      */
     @Override
-    public String generateInputCode(JsonNode jsonData) {
-        JsonNode cacheHierarchy =  jsonData.get("commonParameters").get("cache_hierarchy");
-        String l1dSize = cacheHierarchy.get("l1d_size").asText();
-        int l1dAssoc = cacheHierarchy.get("l1d_assoc").asInt();
-        String l1iSize = cacheHierarchy.get("l1i_size").asText();
-        int l1iAssoc = cacheHierarchy.get("l1i_assoc").asInt();
-        String l2Size = cacheHierarchy.get("l2_size").asText();
-        int l2Assoc = cacheHierarchy.get("l2_assoc").asInt();
-        int numL2Banks = jsonData.get("gem5").get("cache_hierarchy").get("num_l2_banks").asInt();
+    public String generateInputCode() {
 
-        ObjectNode memory = (ObjectNode) jsonData.get("gem5").get("memory");
-        String memorySize = memory.get("size").asText();
+        String memorySize = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.memory.size").asText();
+        String startingCoreType = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.processor.starting_core_type").asText();
+        String switchCoreType = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.processor.switch_core_type").asText();
+        String isa = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.processor.isa").asText();
+        String binaryName = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.binary.name").asText();
 
-        ObjectNode processor = (ObjectNode) jsonData.get("gem5").get("processor");
-        String startingCoreType = processor.get("starting_core_type").asText();
-        String switchCoreType = processor.get("switch_core_type").asText();
-        int numCores = processor.get("num_cores").asInt();
-        String isa = processor.get("isa").asText();
-
-        ObjectNode board = (ObjectNode) jsonData.get("commonParameters").get("board");
-        String clkFreq = board.get("clk_freq").asText();
-
-        ObjectNode binary = (ObjectNode) jsonData.get("gem5").get("binary");
-        String binaryName = binary.get("name").asText();
 
         StringBuilder pythonCodeBuilder = new StringBuilder();
         pythonCodeBuilder.append("from gem5.utils.requires import requires\n");
@@ -61,7 +54,7 @@ public class Gem5Input implements GenerateInputParameters {
         pythonCodeBuilder.append("    l1i_assoc=" + l1iAssoc + ",\n");
         pythonCodeBuilder.append("    l2_size=\"" + l2Size + "\",\n");
         pythonCodeBuilder.append("    l2_assoc=" + l2Assoc + ",\n");
-        pythonCodeBuilder.append("    num_l2_banks=" + numL2Banks + "\n");
+        pythonCodeBuilder.append("    num_l2_banks= 1 \n");
         pythonCodeBuilder.append(")\n\n");
 
         pythonCodeBuilder.append("memory = SingleChannelDDR3_1600(\"" + memorySize + "\")\n\n");
@@ -69,12 +62,12 @@ public class Gem5Input implements GenerateInputParameters {
         pythonCodeBuilder.append("processor = SimpleSwitchableProcessor(\n");
         pythonCodeBuilder.append("    starting_core_type=CPUTypes." + startingCoreType + ",\n");
         pythonCodeBuilder.append("    switch_core_type=CPUTypes." + switchCoreType + ",\n");
-        pythonCodeBuilder.append("    num_cores=" + numCores + ",\n");
+        pythonCodeBuilder.append("    num_cores= 2 ,\n");
         pythonCodeBuilder.append("    isa=ISA." + isa + "\n");
         pythonCodeBuilder.append(")\n\n");
 
         pythonCodeBuilder.append("board = SimpleBoard(\n");
-        pythonCodeBuilder.append("    clk_freq=\"" + clkFreq + "\",\n");
+        pythonCodeBuilder.append("    clk_freq=\"" + frequency + "\",\n");
         pythonCodeBuilder.append("    processor=processor,\n");
         pythonCodeBuilder.append("    memory=memory,\n");
         pythonCodeBuilder.append("    cache_hierarchy=cache_hierarchy\n");

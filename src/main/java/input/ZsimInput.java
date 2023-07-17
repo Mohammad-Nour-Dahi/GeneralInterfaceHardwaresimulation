@@ -1,31 +1,44 @@
 package input;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import managementOFJsonNodeALL.JsonNodeALL;
 
 /**
  * The ZsimInput class implements the GenerateInputParameters interface to generate input code
  * for the Zsim simulator based on the provided JSON data.
  */
-public class ZsimInput implements GenerateInputParameters {
-    //TODO json to this methode
+public class ZsimInput extends GenerateInputParametersImplementation {
+
+    /**
+
+     Constructs a new instance of the ZsimInput class.
+
+     @param parametersFormInputJSON The input JSON node.
+     */
+    public ZsimInput(JsonNode parametersFormInputJSON) {
+        super(parametersFormInputJSON);
+
+        // Calculate the cache sizes using the calculateCacheSize method
+        l1dSize = calculateCacheSize(l1dSize);
+        l1iSize = calculateCacheSize(l1iSize);
+        l2Size = calculateCacheSize(l2Size);
+
+        // Convert the frequency from GHz to megahertz using the convertToMegahertz method
+        frequency = convertToMegahertz(frequency);
+    }
+
+
     /**
      * Generates input code for the Zsim simulator based on the provided JSON data.
      *
-     * @param jsonData The JSON data used to generate the input code.
      * @return The generated input code as a String.
      */
     @Override
-    public String generateInputCode(JsonNode jsonData) {
-        JsonNode cacheHierarchy =  jsonData.get("commonParameters").get("cache_hierarchy");
-        String l1dSize = cacheHierarchy.get("l1d_size").asText().replaceAll("KiB","");
-        int l1dAssoc = cacheHierarchy.get("l1d_assoc").asInt();
-        String l1iSize = cacheHierarchy.get("l1i_size").asText().replaceAll("KiB","");
-        int l1iAssoc = cacheHierarchy.get("l1i_assoc").asInt();
-        String l2Size = cacheHierarchy.get("l2_size").asText().replaceAll("kB","");
-        int l2Assoc = cacheHierarchy.get("l2_assoc").asInt();
+    public String generateInputCode() {
 
 
         StringBuilder cfgCodeBuilder = new StringBuilder();
+
 
         cfgCodeBuilder.append("// Example zsim config file\n");
         cfgCodeBuilder.append("// Models a hypothetical Skylake-like 32-core CMP, 64MB shared LLC, mesh network, 6-channel DDR4\n\n");
@@ -43,32 +56,32 @@ public class ZsimInput implements GenerateInputParameters {
         cfgCodeBuilder.append("        l1d = {\n");
         cfgCodeBuilder.append("            array = {\n");
         cfgCodeBuilder.append("                type = \"SetAssoc\";\n");
-        cfgCodeBuilder.append("                ways = "+l1dAssoc+";\n");
+        cfgCodeBuilder.append("                ways = " + l1dAssoc + ";\n");
         cfgCodeBuilder.append("            };\n");
         cfgCodeBuilder.append("            caches = 1;\n");
-        cfgCodeBuilder.append("            latency = 4;\n");
-        cfgCodeBuilder.append("            size = "+l1dSize+"768;\n");
+        cfgCodeBuilder.append("            latency = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.caches.l1d.latency")).append(";\n");
+        cfgCodeBuilder.append("            size = " + l1dSize + ";\n");
         cfgCodeBuilder.append("        };\n");
         cfgCodeBuilder.append("        l1i = {\n");
         cfgCodeBuilder.append("            array = {\n");
         cfgCodeBuilder.append("                type = \"SetAssoc\";\n");
-        cfgCodeBuilder.append("                ways = "+l1iAssoc+";\n");
+        cfgCodeBuilder.append("                ways = " + l1iAssoc + ";\n");
         cfgCodeBuilder.append("            };\n");
         cfgCodeBuilder.append("            caches = 1;\n");
-        cfgCodeBuilder.append("            latency = 3;\n");
-        cfgCodeBuilder.append("            size = "+l1iSize+"768;\n");
+        cfgCodeBuilder.append("            latency = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.caches.l1i.latency")).append(";\n");
+        cfgCodeBuilder.append("            size = " + l1iSize + ";\n");
         cfgCodeBuilder.append("        };\n");
         cfgCodeBuilder.append("        l2 = {\n");
         cfgCodeBuilder.append("            array = {\n");
         cfgCodeBuilder.append("                type = \"SetAssoc\";\n");
-        cfgCodeBuilder.append("                ways = "+l2Assoc+";\n");
+        cfgCodeBuilder.append("                ways = " + l2Assoc + ";\n");
         cfgCodeBuilder.append("            };\n");
         cfgCodeBuilder.append("    	    type = \"Timing\";\n");
-        cfgCodeBuilder.append("    	    mshrs = 10;\n");
+        cfgCodeBuilder.append("    	    mshrs = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.caches.l2.mshrs")).append(";\n");
         cfgCodeBuilder.append("            caches = 1;\n");
-        cfgCodeBuilder.append("            latency = 7;\n");
+        cfgCodeBuilder.append("            latency = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.caches.l2.latency")).append(";\n");
         cfgCodeBuilder.append("            children = \"l1i|l1d\";\n");
-        cfgCodeBuilder.append("            size = 262144;\n");
+        cfgCodeBuilder.append("            size = " + l2Size + ";\n");
         cfgCodeBuilder.append("        };\n");
         cfgCodeBuilder.append("        l3 = {\n");
         cfgCodeBuilder.append("            array = {\n");
@@ -95,22 +108,23 @@ public class ZsimInput implements GenerateInputParameters {
         cfgCodeBuilder.append("        };\n");
         cfgCodeBuilder.append("    };\n\n");
 
-        cfgCodeBuilder.append("    frequency = 2800;\n");
-        cfgCodeBuilder.append("    lineSize = 64;\n");
+        cfgCodeBuilder.append("    frequency = " + frequency + ";\n");
+        cfgCodeBuilder.append("    lineSize = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.lineSize")).append(";\n");
         cfgCodeBuilder.append("    networkType = \"mesh\";\n");
-        cfgCodeBuilder.append("    networkFile = \"network_32.mesh\";\n");
-
+        cfgCodeBuilder.append("    networkFile = \"network_32.mesh\";\n\n");
 
         cfgCodeBuilder.append("mem = {\n");
         cfgCodeBuilder.append("    addrMapping = \"rank:col:bank\";\n");
-        cfgCodeBuilder.append("	splitAddrs = False;\n");
-        cfgCodeBuilder.append("    closedPage = True;\n");
-        cfgCodeBuilder.append("    controllerLatency = 40;\n");
-        cfgCodeBuilder.append("    controllers = 6;\n");
+        cfgCodeBuilder.append("    splitAddrs = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.mem.splitAddrs")).append(";\n");
+        cfgCodeBuilder.append("    closedPage = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.mem.closedPage")).append(";\n");
+        cfgCodeBuilder.append("    controllerLatency = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.mem.controllerLatency")).append(";\n");
+        cfgCodeBuilder.append("    controllers = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.mem.controllers")).append(";\n");
         cfgCodeBuilder.append("    tech = \"DDR4-2400-CL17\";\n");
         cfgCodeBuilder.append("    type = \"DDR\";\n");
         cfgCodeBuilder.append("};\n\n");
+
         cfgCodeBuilder.append("};\n\n");
+
         cfgCodeBuilder.append("process0 = {\n");
         cfgCodeBuilder.append("    command = \"ls\";\n");
         cfgCodeBuilder.append("    //startFastForwarded = True;\n");

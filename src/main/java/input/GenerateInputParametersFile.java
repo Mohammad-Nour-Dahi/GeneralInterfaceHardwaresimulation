@@ -1,10 +1,9 @@
 package input;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * The GenerateInputParametersFile class is responsible for generating input parameters file
@@ -17,18 +16,16 @@ public class GenerateInputParametersFile {
      * and JSON data.
      *
      * @param generateInputParameters                       The implementation of GenerateInputParameters interface.
-     * @param inputJsonData                                 The JSON data used to generate the input parameters.
      * @param generateHardwaresimulationInputParametersPath The path of the file where the input parameters will be written.
      */
     public void generateInputParameters(GenerateInputParameters generateInputParameters,
-                                        JsonNode inputJsonData,
                                         String generateHardwaresimulationInputParametersPath) {
         String generateCode;
 
         try {
             // Load the JSON file
 
-            generateCode = generateInputParameters.generateInputCode(inputJsonData);
+            generateCode = generateInputParameters.generateInputCode();
 
             // Write the generated code to a file
             File pythonFile = new File(generateHardwaresimulationInputParametersPath);
