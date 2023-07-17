@@ -10,7 +10,7 @@ import output.GenerateOutputParametersFile;
  * The ParserInterfaceImplementation class is an implementation of the ParserInterface.
  * It provides the logic to parse and run hardware simulations with Docker.
  */
-public class ParserInterfaceImplementation implements ParserInterface {
+public abstract class ParserInterfaceImplementation implements ParserInterface {
     /**
      * The instance of the HardwaresimulationDocker class for managing the hardware simulation.
      */
