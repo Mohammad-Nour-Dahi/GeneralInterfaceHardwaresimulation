@@ -11,15 +11,61 @@ import managementOFJsonNodeALL.JsonNodeALL;
  */
 public abstract class GenerateInputParametersImplementation implements GenerateInputParameters {
 
+    /**
+
+     The parametersFormInputJSON field stores the JSON node containing the input parameters.
+     It represents the JSON object that contains the various input values for the simulation.
+     */
     protected JsonNode parametersFormInputJSON;
+
+    /**
+
+     The l1dSize field stores the size of the L1 data cache as a string.
+     It represents the size of the cache in kilobytes (KB).
+     */
     protected String l1dSize;
+
+    /**
+
+     The l1dAssoc field stores the associativity of the L1 data cache as an integer.
+     It represents the number of cache lines per set in the cache.
+     */
     protected int l1dAssoc;
+
+    /**
+
+     The l1iSize field stores the size of the L1 instruction cache as a string.
+     It represents the size of the cache in kilobytes (KB).
+     */
     protected String l1iSize;
+
+    /**
+
+     The l1iAssoc field stores the associativity of the L1 instruction cache as an integer.
+     It represents the number of cache lines per set in the cache.
+     */
     protected int l1iAssoc;
+
+    /**
+
+     The l2Size field stores the size of the L2 cache as a string.
+     It represents the size of the cache in kilobytes (KB).
+     */
     protected String l2Size;
+
+    /**
+
+     The l2Assoc field stores the associativity of the L2 cache as an integer.
+     It represents the number of cache lines per set in the cache.
+     */
     protected int l2Assoc;
 
-    protected  String frequency;
+    /**
+
+     The frequency field stores the frequency of the processor as a string.
+     It represents the clock frequency in gigahertz (GHz).
+     */
+    protected String frequency;
 
     /**
      * Constructs a GenerateInputParametersImplementation object with the specified JSON input.
