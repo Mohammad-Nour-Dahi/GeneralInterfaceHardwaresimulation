@@ -13,20 +13,16 @@
       "l2_assoc": 16
     },
     "board": {
-      "clk_freq": "3GHz"
+      "frequency": "3GHz"
     }
   },
   "gem5": {
-    "cache_hierarchy": {
-      "num_l2_banks": 1
-    },
     "memory": {
-      "size": "2GiB"
+      "size": "3GiB"
     },
     "processor": {
       "starting_core_type": "TIMING",
       "switch_core_type": "O3",
-      "num_cores": 2,
       "isa": "X86"
     },
     "binary": {
@@ -34,13 +30,9 @@
     }
   },
   "sniper": {
-    "perf_model/cache": {
-      "levels": 2
-    },
     "perf_model/core": {
-      "logical_cpus": 1,
-      "type": "interval",
-      "core_model": "nehalem"
+      "logical_cpus": 2,
+      "type": "interval"
     },
     "perf_model/core/interval_timer": {
       "dispatch_width": 2,
@@ -49,13 +41,6 @@
     },
     "perf_model/sync": {
       "reschedule_cost": 1000
-    },
-    "perf_model/branch_predictor": {
-      "type": "pentium_m",
-      "mispredict_penalty": 8
-    },
-    "perf_model/tlb": {
-      "penalty": 30
     },
     "perf_model/itlb": {
       "size": 48,
@@ -90,7 +75,6 @@
       "shared_cores": 1
     },
     "perf_model/l2_cache": {
-      "perfect": false,
       "address_hash": "mask",
       "replacement_policy": "lru",
       "data_access_time": 12,
@@ -108,75 +92,38 @@
       "directory_type": "full_map"
     },
     "perf_model/dram": {
-      "num_controllers": -1,
       "controllers_interleaving": 4,
       "latency": 45,
       "per_controller_bandwidth": 12.8,
       "chips_per_dimm": 8,
       "dimms_per_controller": 4
     },
-    "network": {
-      "memory_model_1": "bus",
-      "memory_model_2": "bus"
-    },
-    "network/bus": {
-      "bandwidth": 128,
-      "ignore_local_traffic": false
-    },
-    "clock_skew_minimization": {
-      "scheme": "barrier"
-    },
-    "clock_skew_minimization/barrier": {
-      "quantum": 100
-    },
     "dvfs": {
       "transition_latency": 2000
     },
     "dvfs/simple": {
       "cores_per_socket": 1
-    },
-    "power": {
-      "vdd": 1.0,
-      "technology_node": 22
     }
   },
   "zsim": {
     "lineSize": 64,
     "caches": {
-      " l1d": {
+      "l1d": {
         "latency": 4
       },
-      " l1i": {
+      "l1i": {
         "latency": 3
       },
-      " l2": {
-        "type": "Timing",
+      "l2": {
         "mshrs": 10,
-        "latency": 4,
-        "children": "l1i|l1d"
-      },
-      " l3": {
-        "latency": 27,
-        "banks": 32,
-        "children": "l2",
-        "mshrs": 16
+        "latency": 4
       }
-    },
-    "cores": {
-      "skylake": {
-        "cores": 1,
-        "dcache": "l1d",
-        "icache": "l1i",
-        "type": "OOO"
-      }
-
     },
     "mem": {
-      "splitAddrs" : false,
-      "closedPage" :true,
-      "controllerLatency" : 40,
-      "controllers" : 6
-
+      "splitAddrs": false,
+      "closedPage": true,
+      "controllerLatency": 40,
+      "controllers": 6
     }
   }
 }
