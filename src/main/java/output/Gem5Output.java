@@ -21,7 +21,8 @@ public class Gem5Output extends GenerateOutputParametersImplements {
     private Map<String, String> parameterMap = new HashMap<>(Map.of(
             "simInsts", "Instructions",
             "board.processor.start0.core.numCycles", "Cycles",
-            "simSeconds", "Time (ns)"
+            "simSeconds", "Time (ns)",
+            "hostSeconds","HostNanoseconds"
 
     ));
 
@@ -71,6 +72,7 @@ public class Gem5Output extends GenerateOutputParametersImplements {
         calculateSimulationResultGem5AndZsim(parameterMap, jsonOutputParameter, resultJson);
 
         resultJson.put("Time (ns)", findPropertyValue(resultJson, "Time (ns)").asDouble() * NANOSECONDS_IN_SECOND);
+        resultJson.put("HostNanoseconds", findPropertyValue(resultJson, "HostNanoseconds").asDouble() * NANOSECONDS_IN_SECOND);
 
         String outputResultJson = "";
         try {

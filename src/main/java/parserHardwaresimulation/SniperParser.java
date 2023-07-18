@@ -24,14 +24,20 @@ public class SniperParser extends ParserInterfaceImplementation {
         generateInputParametersFile.generateInputParameters(new SniperInput(input), "../resources/"+SniperCfg);
 
         host.inputFileTOContainer(containerId, "../resources/"+SniperCfg, "usr/local/src/sniper/config/");
-
+        // Capture the start time
+        long startTime = System.nanoTime();
         String outputConsole=  host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"./run-sniper", "-c", "SniperSilvermont", "/bin/ls"}));
+        // Capture the end time
+        long endTime = System.nanoTime();
+
+        // Calculate the execution time (difference between end time and start time)
+        long executionTime = endTime - startTime;
         // host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"cat", "sim.out"}));
         handleOutputConsole(outputConsole);
 
         host.outputFileFromContainer(containerId, "usr/local/src/sniper/sim.out", "../resources/"+SniperOut);
 
-        generateOutputParametersFile.generateOutputParameters(new SniperOutput(), "../resources/"+SniperOut, statsOutputPath + "/generatestatsOutputSniper.json");
+        generateOutputParametersFile.generateOutputParameters(new SniperOutput(), "../resources/"+SniperOut, statsOutputPath + "/generatestatsOutputSniper.json","\"HostNanoseconds\" : "+executionTime);
 
         exit();
     }

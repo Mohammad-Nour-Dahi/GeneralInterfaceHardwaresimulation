@@ -129,7 +129,20 @@ public class GeneralInterfaceHardwaresimulation {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        // Capture the start time
+        long startTime = System.nanoTime();
+
         GeneralInterfaceHardwaresimulation generalHardwaresimulation = new GeneralInterfaceHardwaresimulation();
         generalHardwaresimulation.simulation(args);
+
+        // Capture the end time
+        long endTime = System.nanoTime();
+
+        // Calculate the execution time (difference between end time and start time)
+        long executionTime = endTime - startTime;
+
+        // Output the execution time
+        System.out.println("Execution time: " + executionTime + " nanoseconds");
+
     }
 }

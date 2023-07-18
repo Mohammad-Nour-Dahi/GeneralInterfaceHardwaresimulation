@@ -23,7 +23,10 @@ public class ZsimOutput extends GenerateOutputParametersImplements {
     private Map<String, String> parameterMap = new HashMap<>(Map.of(
             "root.skylake.skylake-0.instrs", "Instructions",
             "root.skylake.skylake-0.cycles", "Cycles",
-            "root.contention.domain-0.time", "Time (ns)"
+            "root.contention.domain-0.time", "Time (ns)",
+            "root.time.init","HostNanoseconds",
+            "root.time.bound","HostNanoseconds",
+            "root.time.weave","HostNanoseconds"
 
     ));
 
@@ -107,31 +110,34 @@ public class ZsimOutput extends GenerateOutputParametersImplements {
      */
     @Override
     public String generateStatisticsParametersJson(String filePath) {
-        ObjectNode resultJson = objectMapper.createObjectNode();
+        ObjectNode resultStatsJson = objectMapper.createObjectNode();
         String outputResultJson = "";
         // Generate the initial JSON object
-        ObjectNode jsonObject = generateStatisticsJsonZsim(filePath);
+        ObjectNode jsonStatsFromSimulation = generateStatisticsJsonZsim(filePath);
 
         // Iterate over the parameterMap and update the resultJson with matching values from the jsonObject
         parameterMap.forEach((key, outputParameter) -> {
-            if (JsonNodeALL.hasALL(jsonObject, key)) {
-                JsonNode value = JsonNodeALL.getALL(jsonObject, key);
-                resultJson.set(outputParameter, value);
+            if (JsonNodeALL.hasALL(jsonStatsFromSimulation, key)) {
+                JsonNode value = JsonNodeALL.getALL(jsonStatsFromSimulation, key);
+                resultStatsJson.set(outputParameter, value);
             }
         });
         // Num cache misses
         addKeysWithSameValue(cacheSummaryCacheL1DNumCacheMisses, "Cache Summary.Cache L1-D.num cache misses",
-                jsonObject, resultJson);
+                jsonStatsFromSimulation, resultStatsJson);
         addKeysWithSameValue(cacheSummaryCacheL1INumCacheMisses, "Cache Summary.Cache L1-I.num cache misses",
-                jsonObject, resultJson);
+                jsonStatsFromSimulation, resultStatsJson);
         addKeysWithSameValue(cacheSummaryCacheL2NumCacheMisses, "Cache Summary.Cache L2.num cache misses",
-                jsonObject, resultJson);
+                jsonStatsFromSimulation, resultStatsJson);
+        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "HostNanoseconds"),
+                "HostNanoseconds", jsonStatsFromSimulation, resultStatsJson);
 
-        calculateSimulationResultGem5AndZsim(parameterMap, jsonObject, resultJson);
+
+        calculateSimulationResultGem5AndZsim(parameterMap, jsonStatsFromSimulation, resultStatsJson);
         try {
             // Create an ObjectWriter with indentation enabled
             ObjectWriter objectWriter = objectMapper.writer().with(SerializationFeature.INDENT_OUTPUT);
-            outputResultJson = objectWriter.writeValueAsString(resultJson);
+            outputResultJson = objectWriter.writeValueAsString(resultStatsJson);
         } catch (JsonProcessingException e) {
             System.err.println("Error writing JSON: " + e.getMessage());
             e.printStackTrace();

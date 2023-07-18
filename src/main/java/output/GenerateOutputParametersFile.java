@@ -73,4 +73,10 @@ public class GenerateOutputParametersFile {
             System.out.println(e.getMessage() + ": " + filePath);
         }
     }
+    public void generateOutputParameters(GenerateOutputParameters generateOutputParameters, String generateHardwareSimulationOutputParametersPath, String generateJsonPath,String hostNanoseconds){
+        String jsonOutputParameter = generateOutputParameters.generateStatisticsParametersJson(generateHardwareSimulationOutputParametersPath);
+        String sortedJsonOutputParameter = sortJsonOutputParameter(jsonOutputParameter.replaceFirst("}",", "+hostNanoseconds+"\n}"));
+        System.out.println("---------- outputStats ----------\n" + sortedJsonOutputParameter +"\n---------- END ----------");
+        saveJsonToFile(sortedJsonOutputParameter, generateJsonPath);
+    }
 }
