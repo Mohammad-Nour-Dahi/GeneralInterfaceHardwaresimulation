@@ -16,17 +16,19 @@ public class SniperParser extends ParserInterfaceImplementation {
      */
     @Override
     public void parse(JsonNode input) {
+        super.parse(input);
         String SniperCfg = "SniperSilvermont.cfg";
         String SniperOut = "SniperSilvermont.out";
-        super.parse(input);
+
         init("sniper");
 
         generateInputParametersFile.generateInputParameters(new SniperInput(input), "../resources/"+SniperCfg);
 
         host.inputFileTOContainer(containerId, "../resources/"+SniperCfg, "usr/local/src/sniper/config/");
+        host.inputFileTOContainer(containerId, binaryPath, "/usr/local/src/sniper/");
         // Capture the start time
         long startTime = System.nanoTime();
-        String outputConsole=  host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"./run-sniper", "-c", "SniperSilvermont", "/bin/ls"}));
+        String outputConsole=  host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"./run-sniper", "-c", "SniperSilvermont", command}));
         // Capture the end time
         long endTime = System.nanoTime();
 

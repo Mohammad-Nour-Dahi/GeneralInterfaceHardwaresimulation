@@ -126,7 +126,7 @@ public class ZsimInput extends GenerateInputParametersImplementation {
         cfgCodeBuilder.append("};\n\n");
 
         cfgCodeBuilder.append("process0 = {\n");
-        cfgCodeBuilder.append("    command = \"ls\";\n");
+        cfgCodeBuilder.append("    command =\""+command+"\";\n");
         cfgCodeBuilder.append("    //startFastForwarded = True;\n");
         cfgCodeBuilder.append("};\n");
 

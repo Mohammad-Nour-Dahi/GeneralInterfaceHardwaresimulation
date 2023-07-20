@@ -3,6 +3,11 @@ package input;
 import com.fasterxml.jackson.databind.JsonNode;
 import managementOFJsonNodeALL.JsonNodeALL;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
 
  This abstract class implements the GenerateInputParameters interface and provides common functionality
@@ -68,6 +73,11 @@ public abstract class GenerateInputParametersImplementation implements GenerateI
     protected String frequency;
 
     /**
+     * The "command" variable stores the command to be executed.
+     */
+    protected String command;
+
+    /**
      * Constructs a GenerateInputParametersImplementation object with the specified JSON input.
      *
      * @param parametersFormInputJSON The JSON input containing the parameters for generating input.
@@ -82,6 +92,14 @@ public abstract class GenerateInputParametersImplementation implements GenerateI
         this.l2Size = cacheHierarchy.get("l2_size").asText();
         this.l2Assoc = cacheHierarchy.get("l2_assoc").asInt();
         this.frequency = JsonNodeALL.getALL(parametersFormInputJSON,"commonParameters.board.frequency").asText();
+      String programPath = JsonNodeALL.getALL(parametersFormInputJSON, "commonParameters.hardwaresimulation.programPath").asText();
+        if (!isValidPath(programPath)) {
+            System.err.println("Invalid programPath: " + programPath);
+            System.exit(1);
+        }
+
+        String fileName = new File(programPath).getName();
+       this.command = "./" + fileName.replaceAll("\\.c","");
     }
 
 
@@ -121,6 +139,21 @@ public abstract class GenerateInputParametersImplementation implements GenerateI
         }
         int megahertz = gigahertz * 1000;
         return String.valueOf(megahertz);
+    }
+    /**
+
+     Checks if the given path is a valid and existing path in the filesystem.
+
+     @param path The path to be checked.
+
+     @return {@code true} if the path is valid and exists in the filesystem, {@code false} otherwise.
+     */
+    private  boolean isValidPath(String path) {
+        // Use Paths.get to convert the path string to a Path object
+        Path p = Paths.get(path);
+
+        // Check if the path is absolute and exists in the filesystem
+        return p.isAbsolute() && Files.exists(p);
     }
 
 

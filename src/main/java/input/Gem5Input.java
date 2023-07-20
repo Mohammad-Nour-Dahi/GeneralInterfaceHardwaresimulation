@@ -30,7 +30,6 @@ public class Gem5Input extends GenerateInputParametersImplementation {
         String startingCoreType = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.processor.starting_core_type").asText();
         String switchCoreType = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.processor.switch_core_type").asText();
         String isa = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.processor.isa").asText();
-        String binaryName = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.binary.name").asText();
 
 
         StringBuilder pythonCodeBuilder = new StringBuilder();
@@ -42,7 +41,7 @@ public class Gem5Input extends GenerateInputParametersImplementation {
         pythonCodeBuilder.append("from gem5.coherence_protocol import CoherenceProtocol\n");
         pythonCodeBuilder.append("from gem5.isas import ISA\n");
         pythonCodeBuilder.append("from gem5.components.processors.cpu_types import CPUTypes\n");
-        pythonCodeBuilder.append("from gem5.resources.resource import Resource\n");
+        pythonCodeBuilder.append("from gem5.resources.resource import CustomResource\n");
         pythonCodeBuilder.append("from gem5.simulate.simulator import Simulator\n\n");
 
         pythonCodeBuilder.append("requires(isa_required=ISA." + isa + ", coherence_protocol_required=CoherenceProtocol.MESI_TWO_LEVEL)\n\n");
@@ -73,7 +72,7 @@ public class Gem5Input extends GenerateInputParametersImplementation {
         pythonCodeBuilder.append("    cache_hierarchy=cache_hierarchy\n");
         pythonCodeBuilder.append(")\n\n");
 
-        pythonCodeBuilder.append("binary = Resource(\"" + binaryName + "\")\n\n");
+        pythonCodeBuilder.append("binary = CustomResource(\"" + command.replaceAll("./","") + "\")\n\n");
 
         pythonCodeBuilder.append("board.set_se_binary_workload(binary)\n\n");
 

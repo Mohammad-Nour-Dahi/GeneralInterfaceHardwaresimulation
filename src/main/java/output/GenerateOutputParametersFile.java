@@ -73,10 +73,27 @@ public class GenerateOutputParametersFile {
             System.out.println(e.getMessage() + ": " + filePath);
         }
     }
-    public void generateOutputParameters(GenerateOutputParameters generateOutputParameters, String generateHardwareSimulationOutputParametersPath, String generateJsonPath,String hostNanoseconds){
+
+    /**
+     * Generates output parameters using the given GenerateOutputParameters object and file paths.
+     *
+     * @param generateOutputParameters      The GenerateOutputParameters object used to generate statistics parameters.
+     * @param generateHardwareSimulationOutputParametersPath The file path for generating hardware simulation output parameters.
+     * @param generateJsonPath              The file path for generating the JSON file.
+     * @param hostNanoseconds               The value of host nanoseconds to be added to the JSON.
+     */
+    public void generateOutputParameters(GenerateOutputParameters generateOutputParameters, String generateHardwareSimulationOutputParametersPath, String generateJsonPath, String hostNanoseconds) {
+        // Generate statistics parameters in JSON format
         String jsonOutputParameter = generateOutputParameters.generateStatisticsParametersJson(generateHardwareSimulationOutputParametersPath);
-        String sortedJsonOutputParameter = sortJsonOutputParameter(jsonOutputParameter.replaceFirst("}",", "+hostNanoseconds+"\n}"));
-        System.out.println("---------- outputStats ----------\n" + sortedJsonOutputParameter +"\n---------- END ----------");
+
+        // Add the value of host nanoseconds and sort the JSON output parameters
+        String sortedJsonOutputParameter = sortJsonOutputParameter(jsonOutputParameter.replaceFirst("}", ", " + hostNanoseconds + "\n}"));
+
+        // Print the sorted JSON output parameters
+        System.out.println("---------- outputStats ----------\n" + sortedJsonOutputParameter + "\n---------- END ----------");
+
+        // Save the sorted JSON output parameters to the specified file path
         saveJsonToFile(sortedJsonOutputParameter, generateJsonPath);
     }
+
 }

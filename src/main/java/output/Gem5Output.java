@@ -71,7 +71,9 @@ public class Gem5Output extends GenerateOutputParametersImplements {
 
         calculateSimulationResultGem5AndZsim(parameterMap, jsonOutputParameter, resultJson);
 
+        // Multiply the value of "Time (ns)" in resultJson by NANOSECONDS_IN_SECOND
         resultJson.put("Time (ns)", findPropertyValue(resultJson, "Time (ns)").asDouble() * NANOSECONDS_IN_SECOND);
+        // Multiply the value of "HostNanoseconds" in resultJson by NANOSECONDS_IN_SECOND
         resultJson.put("HostNanoseconds", findPropertyValue(resultJson, "HostNanoseconds").asDouble() * NANOSECONDS_IN_SECOND);
 
         String outputResultJson = "";

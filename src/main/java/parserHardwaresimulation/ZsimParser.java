@@ -15,27 +15,30 @@ public class ZsimParser extends ParserInterfaceImplementation {
         String zsim_out = "zsim.out";
         init("zsim");
 
-        generateInputParametersFile.generateInputParameters(new ZsimInput(input),  "../resources/" + generateHardwaresimulationParameter);
+        generateInputParametersFile.generateInputParameters(new ZsimInput(input), "../resources/" + generateHardwaresimulationParameter);
 
         hardwaresimulation.inputFileTOContainer(containerId, "../resources/" + generateHardwaresimulationParameter, "/usr/local/src/zsim-plusplus/tests/");
 
         host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"echo", "0", "|", "sudo", "tee", "/proc/sys/kernel/randomize_va_space"}));
 
         host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"scons", "-j16"}));
-
-        String outputConsole=   host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"./build/opt/zsim", "tests/" + generateHardwaresimulationParameter}));
+        host.inputFileTOContainer(containerId, programPath, "/usr/local/src/zsim-plusplus/");
+        String outputConsoleCompile = host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"gcc", "-static", "-std=c99", "-o", fileName.replaceAll("\\.c", ""), fileName}));
+        handleOutputConsole(outputConsoleCompile);
+        String outputConsole = host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"./build/opt/zsim", "tests/" + generateHardwaresimulationParameter}));
 
         handleOutputConsole(outputConsole);
 
         // host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"cat", "/usr/local/src/zsim-plusplus/zsim.out"}));
 
 
-        hardwaresimulation.outputFileFromContainer(containerId,"/usr/local/src/zsim-plusplus/zsim.out","../resources/" + zsim_out);
+        hardwaresimulation.outputFileFromContainer(containerId, "/usr/local/src/zsim-plusplus/zsim.out", "../resources/" + zsim_out);
         generateOutputParametersFile.generateOutputParameters(new ZsimOutput(), "../resources/" + zsim_out, statsOutputPath + "/generatestatsOutputZsim.json");
 
         exit();
 
     }
+
     /**
      * Handles the output console and performs error handling based on its content.
      *
@@ -60,6 +63,10 @@ public class ZsimParser extends ParserInterfaceImplementation {
             System.exit(1);
         } else if (outputConsole.contains("can't connect more cores to it")) {
             System.err.println("Can't connect more cores to it encountered. Exiting the program.");
+            exit();
+            System.exit(1);
+        } else if (outputConsole.contains("error")) {
+            System.err.println("error encountered. Exiting the program.");
             exit();
             System.exit(1);
         }

@@ -6,6 +6,11 @@ import managementOFJsonNodeALL.JsonNodeALL;
 import managementOfDockerfiles.HardwaresimulationDocker;
 import output.GenerateOutputParametersFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * The ParserInterfaceImplementation class is an implementation of the ParserInterface.
  * It provides the logic to parse and run hardware simulations with Docker.
@@ -42,6 +47,27 @@ public abstract class ParserInterfaceImplementation implements ParserInterface {
      */
     protected String statsOutputPath;
 
+
+    /**
+     * The "binaryPath" variable stores the path to the binary file.
+
+     */
+    protected String binaryPath;
+
+    /**
+     * The "command" variable stores the command to be executed.
+     */
+    protected String command;
+
+    /**
+     * The "programPath" variable stores the path to the program.
+     */
+    protected String programPath;
+
+    /**
+     * The "fileName" variable stores the file name.
+     */
+    protected String fileName;
 
     /**
      * Constructor for the ParserInterfaceImplementation class.
@@ -82,7 +108,20 @@ public abstract class ParserInterfaceImplementation implements ParserInterface {
     @Override
     public void parse(JsonNode input) {
         statsOutputPath = JsonNodeALL.getALL(input, "commonParameters.hardwaresimulation.statsOutputPath").asText();
+        programPath = JsonNodeALL.getALL(input, "commonParameters.hardwaresimulation.programPath").asText();
+        binaryPath = JsonNodeALL.getALL(input, "commonParameters.hardwaresimulation.binaryPath").asText();
 
+        if (!isValidPath(programPath)) {
+            System.err.println("Invalid programPath: " + programPath);
+            System.exit(1);
+        }
+
+        if (!isValidPath(binaryPath)) {
+            System.err.println("Invalid binaryPath: " + binaryPath);
+            System.exit(1);
+        }
+        fileName = new File(programPath).getName();
+        command = "./"+fileName.replaceAll("\\.c","");
         // Implementation of the parsing and simulation logic using Docker
     }
 
@@ -96,6 +135,22 @@ public abstract class ParserInterfaceImplementation implements ParserInterface {
 
         // Delete the hardware simulation container
         host.deleteDockerHardwaresimulation(containerId);
+    }
+
+    /**
+
+     Checks if the given path is a valid and existing path in the filesystem.
+
+     @param path The path to be checked.
+
+     @return {@code true} if the path is valid and exists in the filesystem, {@code false} otherwise.
+     */
+    private boolean isValidPath(String path) {
+        // Use Paths.get to convert the path string to a Path object
+        Path p = Paths.get(path);
+
+        // Check if the path is absolute and exists in the filesystem
+        return p.isAbsolute() && Files.exists(p);
     }
 
 }

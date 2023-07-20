@@ -64,6 +64,35 @@ By setting the JAVA_HOME variable and checking the Java version, you can ensure 
  
 - To execute the program, you need to create an input file in JSON format that contains the input parameters for the execution. An example file can be found at resources as [HardwaresimulationParameter.json](HardwaresimulationParameter.json). You can use this file to run the generic interface.
 
+## Running a C-Program in Hardware Simulation
+
+- To execute the C-program in the hardware simulation, you may need to update the paths for the program and binary file.
+- You can run the example program by creating a file named `outputStats` in the root directory `D` and copying or moving the `program` directory from the `GeneralInterfaceHardwaresimulation` directory to the `outputStats` directory.
+
+- Configuration example for the hardware simulation:
+
+```json
+"hardwaresimulation": {
+    "name": "sniper",
+    "programPath": "<Path_to_C_program>",
+    "binaryPath": "<Path_to_binary_directory>",
+...
+}
+```
+
+- Replace `<Path_to_C_program>` with the valid path to the input source of the C-program, for example:
+
+```json
+"programPath": "D:/outputStats/program/fibonacci.c"
+```
+
+- Replace `<Path_to_binary_directory>` with the valid path to the directory where the compiled binary file of the program is stored, for example:
+
+```json
+"binaryPath": "D:/outputStats/program/fibonacci"
+```
+
+Please ensure that the specified directories and files exist and provide valid paths for the hardware simulation.
 
 ### Running the Program
 

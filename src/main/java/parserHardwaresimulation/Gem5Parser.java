@@ -27,7 +27,7 @@ public class Gem5Parser extends ParserInterfaceImplementation {
         generateInputParametersFile.generateInputParameters(new Gem5Input(input),  generateHardwaresimulationInputParametersPath);
 
         host.inputFileTOContainer(containerId, generateHardwaresimulationInputParametersPath, "usr/local/src/gem5/configs/learning_gem5/part1/");
-
+        host.inputFileTOContainer(containerId, binaryPath, "usr/local/src/gem5/");
         String outputConsole = host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"build/X86/gem5.opt", "--stats-file=" + gem5Stats, "configs/learning_gem5/part1/generateGem5Parameter.py"}));
         //host.outputFromHardwaresimulationConsole( hardwaresimulation.command(new String[]{"cat", "m5out/" + gem5Stats}));
         handleOutputConsole(outputConsole);
