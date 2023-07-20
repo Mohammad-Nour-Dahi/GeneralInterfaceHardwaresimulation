@@ -64,6 +64,7 @@ public class Gem5Output extends GenerateOutputParametersImplements {
                 }
             }
         });
+
         // num cache misses = l1_controllers0.L1Icache.m_demand_misses + l1_controllers1.L1Icache.m_demand_misses
         addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L1-I.num cache misses"), "Cache Summary.Cache L1-I.num cache misses", jsonOutputParameter, resultJson);
         addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L1-D.num cache misses"), "Cache Summary.Cache L1-D.num cache misses", jsonOutputParameter, resultJson);

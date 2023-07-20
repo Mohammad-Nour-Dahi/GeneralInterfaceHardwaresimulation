@@ -50,7 +50,6 @@ public abstract class ParserInterfaceImplementation implements ParserInterface {
 
     /**
      * The "binaryPath" variable stores the path to the binary file.
-
      */
     protected String binaryPath;
 
@@ -107,24 +106,32 @@ public abstract class ParserInterfaceImplementation implements ParserInterface {
      */
     @Override
     public void parse(JsonNode input) {
-        statsOutputPath = JsonNodeALL.getALL(input, "commonParameters.hardwaresimulation.statsOutputPath").asText();
-        programPath = JsonNodeALL.getALL(input, "commonParameters.hardwaresimulation.programPath").asText();
-        binaryPath = JsonNodeALL.getALL(input, "commonParameters.hardwaresimulation.binaryPath").asText();
+        try {
 
-        if (!isValidPath(programPath)) {
-            System.err.println("Invalid programPath: " + programPath);
+
+            statsOutputPath = JsonNodeALL.getALL(input, "commonParameters.hardwaresimulation.statsOutputPath").asText();
+            programPath = JsonNodeALL.getALL(input, "commonParameters.hardwaresimulation.programPath").asText();
+            binaryPath = JsonNodeALL.getALL(input, "commonParameters.hardwaresimulation.binaryPath").asText();
+
+            if (!isValidPath(programPath)) {
+                System.err.println("Invalid programPath: " + programPath);
+                System.exit(1);
+            }
+
+            if (!isValidPath(binaryPath)) {
+                System.err.println("Invalid binaryPath: " + binaryPath);
+                System.exit(1);
+            }
+            fileName = new File(programPath).getName();
+            command = "./" + fileName.replaceAll("\\.c", "");
+            // Implementation of the parsing and simulation logic using Docker
+
+        } catch (NullPointerException e) {
+            // Handle the case when the JsonNode is null
+            System.err.println("Error: The \"commonParameters.hardwaresimulation\" section contains a null JsonNode. Please ensure that the input data is correctly formatted and all required fields are provided in the \"commonParameters.hardwaresimulation\" section.");
             System.exit(1);
         }
-
-        if (!isValidPath(binaryPath)) {
-            System.err.println("Invalid binaryPath: " + binaryPath);
-            System.exit(1);
-        }
-        fileName = new File(programPath).getName();
-        command = "./"+fileName.replaceAll("\\.c","");
-        // Implementation of the parsing and simulation logic using Docker
     }
-
 
     /**
      * Performs cleanup operations and terminates the hardware simulation.
@@ -138,12 +145,10 @@ public abstract class ParserInterfaceImplementation implements ParserInterface {
     }
 
     /**
-
-     Checks if the given path is a valid and existing path in the filesystem.
-
-     @param path The path to be checked.
-
-     @return {@code true} if the path is valid and exists in the filesystem, {@code false} otherwise.
+     * Checks if the given path is a valid and existing path in the filesystem.
+     *
+     * @param path The path to be checked.
+     * @return {@code true} if the path is valid and exists in the filesystem, {@code false} otherwise.
      */
     private boolean isValidPath(String path) {
         // Use Paths.get to convert the path string to a Path object
