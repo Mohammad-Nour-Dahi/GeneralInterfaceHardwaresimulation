@@ -68,12 +68,12 @@ By setting the JAVA_HOME variable and checking the Java version, you can ensure 
 
 - To execute the C-program in the hardware simulation, you may need to update the paths for the program and binary file.
 - You can run the example program by creating a file named `outputStats` in the root directory `D` and copying or moving the `program` directory from the `GeneralInterfaceHardwaresimulation` directory to the `outputStats` directory.
-
+- you can select the value for `name` in the configuration file between "gem5", "sniper", and "zsim" to activate the corresponding hardware simulation.
 - Configuration example for the hardware simulation:
 
 ```json
 "hardwaresimulation": {
-    "name": "sniper",
+    "name": "gem5", // Here you can choose between gem5, sniper, and zsim
     "programPath": "<Path_to_C_program>",
     "binaryPath": "<Path_to_binary_directory>",
 ...
@@ -136,9 +136,10 @@ The path to the output file is specified in the input file under the `statsOutpu
   "commonParameters": {
     "hardwaresimulation": {
       "name": "gem5",
+      ...
       "statsOutputPath": "D:/outputStats"
     },
-    // ...
+     ...
   },
-  // ...
+   ...
 }
