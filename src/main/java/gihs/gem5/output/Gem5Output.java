@@ -5,19 +5,21 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import gihs.core.output.GenerateOutputParametersImplements;
+import gihs.core.output.GenerateOutputParametersAbstract;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The Gem5Output class implements the GenerateOutputParameters interface
  * and provides functionality to generate statistics parameters in JSON format
  * based on a file containing simulation data.
  */
-public class Gem5Output extends GenerateOutputParametersImplements {
+public class Gem5Output extends GenerateOutputParametersAbstract {
     private static final double NANOSECONDS_IN_SECOND = 1.0e9;
     private Map<String, String> parameterMap = new HashMap<>(Map.of(
             "simInsts", "Instructions",

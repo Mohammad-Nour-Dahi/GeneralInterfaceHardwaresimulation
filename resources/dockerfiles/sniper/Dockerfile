@@ -53,7 +53,6 @@ RUN apt-get update && apt-get install -y \
     patchutils \
     pkg-config \
     texinfo \
-    zlib1g-dev \
  && rm -rf /var/lib/apt/lists/*
 # Helper utilities
 RUN apt-get update && apt-get install -y \

@@ -15,7 +15,7 @@ import java.nio.file.Paths;
  * The ParserInterfaceImplementation class is an implementation of the ParserInterface.
  * It provides the logic to parse and run hardware simulations with Docker.
  */
-public abstract class ParserInterfaceImplementation implements ParserInterface {
+public abstract class ParserAbstract implements ParserInterface {
     /**
      * The instance of the HardwaresimulationDocker class for managing the hardware simulation.
      */
@@ -74,7 +74,7 @@ public abstract class ParserInterfaceImplementation implements ParserInterface {
      * and the GenerateInputParametersFile and GenerateOutputParametersFile objects
      * for hardware simulation parsing.
      */
-    protected ParserInterfaceImplementation() {
+    protected ParserAbstract() {
         // Create a new instance of the HardwaresimulationDocker class
         this.hardwaresimulation = new HardwaresimulationDocker();
 

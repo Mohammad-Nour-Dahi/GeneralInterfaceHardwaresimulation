@@ -1,14 +1,14 @@
 package gihs.gem5.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import gihs.core.parser.ParserInterfaceImplementation;
+import gihs.core.parser.ParserAbstract;
 import gihs.gem5.input.Gem5Input;
 import gihs.gem5.output.Gem5Output;
 
 /**
  * The Gem5Parser class is responsible for parsing and running the Gem5 hardware simulation with input and output.
  */
-public class Gem5Parser extends ParserInterfaceImplementation {
+public class Gem5Parser extends ParserAbstract {
 
     /**
      * Parses the input and runs the Gem5 hardware simulation using Docker.

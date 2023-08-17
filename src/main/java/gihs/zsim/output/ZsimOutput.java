@@ -5,19 +5,23 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import gihs.core.output.GenerateOutputParametersImplements;
+import gihs.core.output.GenerateOutputParametersAbstract;
 import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 /**
  * ZsimOutput class extends GenerateOutputParametersImplements and represents a class for generating Zsim output.
  */
-public class ZsimOutput extends GenerateOutputParametersImplements {
+public class ZsimOutput extends GenerateOutputParametersAbstract {
     /**
      * Mapping of parameter keys to output parameter names
      */

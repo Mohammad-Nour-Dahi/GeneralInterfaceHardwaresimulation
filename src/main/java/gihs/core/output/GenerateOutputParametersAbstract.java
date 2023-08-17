@@ -14,7 +14,7 @@ import java.util.Map;
  * GenerateOutputParametersImplements is an abstract class that implements the GenerateOutputParameters interface.
  * It provides basic functionality for generating output parameters in JSON format.
  */
-public abstract class GenerateOutputParametersImplements implements GenerateOutputParameters {
+public abstract class GenerateOutputParametersAbstract implements GenerateOutputParameters {
     /**
      * The objectMapper field is an instance of the ObjectMapper class from the Jackson library,
      * which is used for converting Java objects to JSON strings.
@@ -26,7 +26,7 @@ public abstract class GenerateOutputParametersImplements implements GenerateOutp
      * Default constructor for GenerateOutputParametersImplements.
      * Initializes the ObjectMapper.
      */
-    protected GenerateOutputParametersImplements() {
+    protected GenerateOutputParametersAbstract() {
         objectMapper = new ObjectMapper();
 
 

@@ -13,7 +13,7 @@ import java.nio.file.Paths;
  * <p>
  * for generating input parameters.
  */
-public abstract class GenerateInputParametersImplementation implements GenerateInputParameters {
+public abstract class GenerateInputParametersAbstract implements GenerateInputParameters {
 
     /**
      * The parametersFormInputJSON field stores the JSON node containing the input parameters.
@@ -73,7 +73,7 @@ public abstract class GenerateInputParametersImplementation implements GenerateI
      *
      * @param parametersFormInputJSON The JSON input containing the parameters for generating input.
      */
-    protected GenerateInputParametersImplementation(JsonNode parametersFormInputJSON) {
+    protected GenerateInputParametersAbstract(JsonNode parametersFormInputJSON) {
         try {
             this.parametersFormInputJSON = parametersFormInputJSON;
             JsonNode cacheHierarchy = parametersFormInputJSON.get("commonParameters").get("cache_hierarchy");

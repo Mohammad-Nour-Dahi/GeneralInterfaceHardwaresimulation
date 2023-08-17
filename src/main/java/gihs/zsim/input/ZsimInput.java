@@ -1,14 +1,14 @@
 package gihs.zsim.input;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import gihs.core.input.GenerateInputParametersImplementation;
+import gihs.core.input.GenerateInputParametersAbstract;
 import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
 
 /**
  * The ZsimInput class implements the GenerateInputParameters interface to generate input code
  * for the Zsim simulator based on the provided JSON data.
  */
-public class ZsimInput extends GenerateInputParametersImplementation {
+public class ZsimInput extends GenerateInputParametersAbstract {
 
     /**
      * Constructs a new instance of the ZsimInput class.

@@ -1,14 +1,14 @@
 package gihs.sniper.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import gihs.core.parser.ParserInterfaceImplementation;
+import gihs.core.parser.ParserAbstract;
 import gihs.sniper.input.SniperInput;
 import gihs.sniper.output.SniperOutput;
 
 /**
  * The SniperParser class is responsible for parsing and running the Sniper hardware simulation with input and output
  */
-public class SniperParser extends ParserInterfaceImplementation {
+public class SniperParser extends ParserAbstract {
 
     /**
      * Parses the input and runs the Sniper hardware simulation using Docker

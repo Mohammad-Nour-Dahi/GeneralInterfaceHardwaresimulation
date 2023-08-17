@@ -6,20 +6,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import gihs.core.output.GenerateOutputParametersImplements;
+import gihs.core.output.GenerateOutputParametersAbstract;
 import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The SniperOutput class extends GenerateOutputParametersImplements and represents a class for generating Sniper output.
  * and provides methods to generate statistics parameters in JSON format
  * based on a given file path.
  */
-public class SniperOutput extends GenerateOutputParametersImplements {
+public class SniperOutput extends GenerateOutputParametersAbstract {
     // List of parameter names to be included in the output JSON
     List<String> parameterList = new ArrayList<>(Arrays.asList(
             "Time (ns)", "Instructions", "Cycles", "IPC",

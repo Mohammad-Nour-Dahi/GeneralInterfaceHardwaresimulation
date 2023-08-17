@@ -1,13 +1,13 @@
 package gihs.sniper.input;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import gihs.core.input.GenerateInputParametersImplementation;
+import gihs.core.input.GenerateInputParametersAbstract;
 
 /**
  * The SniperInput class implements the GenerateInputParameters interface to generate input code
  * for the Sniper simulator based on the provided JSON data.
  */
-public class SniperInput extends GenerateInputParametersImplementation {
+public class SniperInput extends GenerateInputParametersAbstract {
     /**
      * Constructs a new instance of the SniperInput class.
      *
