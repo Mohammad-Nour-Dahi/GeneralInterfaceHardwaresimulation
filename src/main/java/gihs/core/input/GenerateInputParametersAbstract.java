@@ -1,7 +1,7 @@
 package gihs.core.input;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOFJsonNodeALL.JsonUtil;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -83,8 +83,8 @@ public abstract class GenerateInputParametersAbstract implements GenerateInputPa
             this.l1iAssoc = cacheHierarchy.get("l1i_assoc").asInt();
             this.l2Size = cacheHierarchy.get("l2_size").asText();
             this.l2Assoc = cacheHierarchy.get("l2_assoc").asInt();
-            this.frequency = JsonNodeALL.getALL(parametersFormInputJSON, "commonParameters.board.frequency").asText();
-            String programPath = JsonNodeALL.getALL(parametersFormInputJSON, "commonParameters.hardwaresimulation.programPath").asText();
+            this.frequency = JsonUtil.get(parametersFormInputJSON, "commonParameters.board.frequency").asText();
+            String programPath = JsonUtil.get(parametersFormInputJSON, "commonParameters.hardwaresimulation.programPath").asText();
             if (!isValidPath(programPath)) {
                 System.err.println("Invalid programPath: " + programPath);
                 System.exit(1);

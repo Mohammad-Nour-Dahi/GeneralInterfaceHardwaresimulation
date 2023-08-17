@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import gihs.core.output.GenerateOutputParametersAbstract;
-import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOFJsonNodeALL.JsonUtil;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -63,8 +63,8 @@ public class SniperOutput extends GenerateOutputParametersAbstract {
 
         // Iterate through the parameterList and add parameters to the resultJson
         for (String parameter : parameterList) {
-            if (JsonNodeALL.hasALL(generateHardwaresimulationOutputParametersJson, parameter)) {
-                JsonNode value = JsonNodeALL.getALL(generateHardwaresimulationOutputParametersJson, parameter);
+            if (JsonUtil.has(generateHardwaresimulationOutputParametersJson, parameter)) {
+                JsonNode value = JsonUtil.get(generateHardwaresimulationOutputParametersJson, parameter);
                 //Adds a percent symbol (%) to the value of a parameter that ends with "rate".
                 if (parameter.endsWith("rate")) {
                     String valueWithPercent = value.asText() + "%";

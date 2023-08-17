@@ -1,7 +1,7 @@
 package gihs.zsim.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import gihs.core.parser.ParserAbstract;
+import gihs.core.hardwaresimulationManagementWithDocker.ParserAbstract;
 import gihs.zsim.input.ZsimInput;
 import gihs.zsim.output.ZsimOutput;
 

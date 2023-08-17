@@ -2,7 +2,7 @@ package gihs.zsim.input;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import gihs.core.input.GenerateInputParametersAbstract;
-import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOFJsonNodeALL.JsonUtil;
 
 /**
  * The ZsimInput class implements the GenerateInputParameters interface to generate input code
@@ -60,7 +60,7 @@ public class ZsimInput extends GenerateInputParametersAbstract {
             cfgCodeBuilder.append("                ways = " + l1dAssoc + ";\n");
             cfgCodeBuilder.append("            };\n");
             cfgCodeBuilder.append("            caches = 1;\n");
-            cfgCodeBuilder.append("            latency = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.caches.l1d.latency")).append(";\n");
+            cfgCodeBuilder.append("            latency = ").append(JsonUtil.get(parametersFormInputJSON, "zsim.caches.l1d.latency")).append(";\n");
             cfgCodeBuilder.append("            size = " + l1dSize + ";\n");
             cfgCodeBuilder.append("        };\n");
             cfgCodeBuilder.append("        l1i = {\n");
@@ -69,7 +69,7 @@ public class ZsimInput extends GenerateInputParametersAbstract {
             cfgCodeBuilder.append("                ways = " + l1iAssoc + ";\n");
             cfgCodeBuilder.append("            };\n");
             cfgCodeBuilder.append("            caches = 1;\n");
-            cfgCodeBuilder.append("            latency = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.caches.l1i.latency")).append(";\n");
+            cfgCodeBuilder.append("            latency = ").append(JsonUtil.get(parametersFormInputJSON, "zsim.caches.l1i.latency")).append(";\n");
             cfgCodeBuilder.append("            size = " + l1iSize + ";\n");
             cfgCodeBuilder.append("        };\n");
             cfgCodeBuilder.append("        l2 = {\n");
@@ -78,9 +78,9 @@ public class ZsimInput extends GenerateInputParametersAbstract {
             cfgCodeBuilder.append("                ways = " + l2Assoc + ";\n");
             cfgCodeBuilder.append("            };\n");
             cfgCodeBuilder.append("    	    type = \"Timing\";\n");
-            cfgCodeBuilder.append("    	    mshrs = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.caches.l2.mshrs")).append(";\n");
+            cfgCodeBuilder.append("    	    mshrs = ").append(JsonUtil.get(parametersFormInputJSON, "zsim.caches.l2.mshrs")).append(";\n");
             cfgCodeBuilder.append("            caches = 1;\n");
-            cfgCodeBuilder.append("            latency = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.caches.l2.latency")).append(";\n");
+            cfgCodeBuilder.append("            latency = ").append(JsonUtil.get(parametersFormInputJSON, "zsim.caches.l2.latency")).append(";\n");
             cfgCodeBuilder.append("            children = \"l1i|l1d\";\n");
             cfgCodeBuilder.append("            size = " + l2Size + ";\n");
             cfgCodeBuilder.append("        };\n");
@@ -110,16 +110,16 @@ public class ZsimInput extends GenerateInputParametersAbstract {
             cfgCodeBuilder.append("    };\n\n");
 
             cfgCodeBuilder.append("    frequency = " + frequency + ";\n");
-            cfgCodeBuilder.append("    lineSize = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.lineSize")).append(";\n");
+            cfgCodeBuilder.append("    lineSize = ").append(JsonUtil.get(parametersFormInputJSON, "zsim.lineSize")).append(";\n");
             cfgCodeBuilder.append("    networkType = \"mesh\";\n");
             cfgCodeBuilder.append("    networkFile = \"network_32.mesh\";\n\n");
 
             cfgCodeBuilder.append("mem = {\n");
             cfgCodeBuilder.append("    addrMapping = \"rank:col:bank\";\n");
-            cfgCodeBuilder.append("    splitAddrs = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.mem.splitAddrs")).append(";\n");
-            cfgCodeBuilder.append("    closedPage = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.mem.closedPage")).append(";\n");
-            cfgCodeBuilder.append("    controllerLatency = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.mem.controllerLatency")).append(";\n");
-            cfgCodeBuilder.append("    controllers = ").append(JsonNodeALL.getALL(parametersFormInputJSON, "zsim.mem.controllers")).append(";\n");
+            cfgCodeBuilder.append("    splitAddrs = ").append(JsonUtil.get(parametersFormInputJSON, "zsim.mem.splitAddrs")).append(";\n");
+            cfgCodeBuilder.append("    closedPage = ").append(JsonUtil.get(parametersFormInputJSON, "zsim.mem.closedPage")).append(";\n");
+            cfgCodeBuilder.append("    controllerLatency = ").append(JsonUtil.get(parametersFormInputJSON, "zsim.mem.controllerLatency")).append(";\n");
+            cfgCodeBuilder.append("    controllers = ").append(JsonUtil.get(parametersFormInputJSON, "zsim.mem.controllers")).append(";\n");
             cfgCodeBuilder.append("    tech = \"DDR4-2400-CL17\";\n");
             cfgCodeBuilder.append("    type = \"DDR\";\n");
             cfgCodeBuilder.append("};\n\n");

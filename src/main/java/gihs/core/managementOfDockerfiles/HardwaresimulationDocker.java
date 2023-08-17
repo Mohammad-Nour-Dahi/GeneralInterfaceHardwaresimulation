@@ -118,7 +118,7 @@ public class HardwaresimulationDocker {
             }
         } catch (InternalServerErrorException e) {
             // Handle internal server error
-            System.err.println("Internal server error occurred: " + e.getMessage());
+            System.err.println("An error message would be generated while inspecting the Docker image : " + e.getMessage());
             e.printStackTrace();
         }
         return false; // Image not found
@@ -192,28 +192,35 @@ public class HardwaresimulationDocker {
      * @param hostFilePath      the path of the file on the host
      */
     public void outputFileFromContainer(String containerId, String containerFilePath, String hostFilePath) {
-        CopyArchiveFromContainerCmd copyFromCmd = dockerClient.copyArchiveFromContainerCmd(containerId, containerFilePath);
+        try {
+            CopyArchiveFromContainerCmd copyFromCmd = dockerClient.copyArchiveFromContainerCmd(containerId, containerFilePath);
 
-        try (InputStream inputStream = copyFromCmd.exec()) {
-            try (TarArchiveInputStream tarInput = new TarArchiveInputStream(inputStream)) {
-                // Jump to the next entry in the tar archive (skip the header)
-                tarInput.getNextTarEntry();
+            try (InputStream inputStream = copyFromCmd.exec()) {
+                try (TarArchiveInputStream tarInput = new TarArchiveInputStream(inputStream)) {
+                    // Skip the header to reach the actual file data
+                    tarInput.getNextTarEntry();
 
-                try (OutputStream outputStream = new FileOutputStream(hostFilePath)) {
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
-                    while ((bytesRead = tarInput.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
+                    try (OutputStream outputStream = new FileOutputStream(hostFilePath)) {
+                        byte[] buffer = new byte[4096];
+                        int bytesRead;
+                        while ((bytesRead = tarInput.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, bytesRead);
+                        }
+
+                        System.out.println("File copied successfully from container to host.");
+                    } catch (IOException e) {
+                        System.err.println("Error while copying the file to host: " + e.getMessage());
                     }
-
-                    System.out.println("File successfully copied from container to host.");
+                } catch (IOException e) {
+                    System.err.println("Error reading the tar archive: " + e.getMessage());
                 }
+            } catch (IOException e) {
+                System.err.println("Error executing the copy command: " + e.getMessage());
             }
-        } catch (IOException e) {
-            System.err.println("Error copying the file: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("An unexpected error occurred: " + e.getMessage());
         }
     }
-
     /**
      * Copies a file from the host to the container.
      *
@@ -240,21 +247,21 @@ public class HardwaresimulationDocker {
     }
 
     /**
-     * Stops the Docker hardwaresimulation container with the given container ID.
+     * Stops the Docker hardwaresimulation container
      *
-     * @param containerId the ID of the container to close
+     *
      */
-    public void closeDockerHardwaresimulation(String containerId) {
+    public void closeDockerHardwaresimulation() {
         StopContainerCmd stopCmd = dockerClient.stopContainerCmd(containerId);
         stopCmd.withTimeout(0).exec();
     }
 
     /**
-     * Deletes the Docker hardwaresimulation container with the given container ID.
+     * Deletes the Docker hardwaresimulation container
      *
-     * @param containerId the ID of the container to delete
+     *
      */
-    public void deleteDockerHardwaresimulation(String containerId) {
+    public void deleteDockerHardwaresimulation() {
         RemoveContainerCmd removeCmd = dockerClient.removeContainerCmd(containerId);
         removeCmd.withForce(true).exec();
     }

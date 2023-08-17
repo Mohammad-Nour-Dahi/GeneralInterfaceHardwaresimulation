@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 /**
  * A utility class for managing JSON nodes.
  */
-public class JsonNodeALL {
+public class JsonUtil {
 
     /**
      * Checks if the given JSON node has all the keys in the specified key path.
@@ -14,7 +14,7 @@ public class JsonNodeALL {
      * @param keyPath  the key path to search for
      * @return true if the JSON node has all the keys in the key path, false otherwise
      */
-    public static boolean hasALL(JsonNode data, String keyPath) {
+    public static boolean has(JsonNode data, String keyPath) {
         String[] keys = keyPath.split("\\.");
 
         JsonNode currentData = data;
@@ -35,7 +35,7 @@ public class JsonNodeALL {
      * @param keyPath  the key path to search for
      * @return the JSON node at the specified key path, or null if the key path is not found
      */
-    public static JsonNode getALL(JsonNode data, String keyPath) {
+    public static JsonNode get(JsonNode data, String keyPath) {
         String[] keys = keyPath.split("\\.");
 
         JsonNode currentNode = data;

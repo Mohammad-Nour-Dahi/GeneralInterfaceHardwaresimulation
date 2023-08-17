@@ -3,7 +3,7 @@ package gihs.core.output;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOFJsonNodeALL.JsonUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +109,7 @@ public abstract class GenerateOutputParametersAbstract implements GenerateOutput
     protected void addKeysWithSameValue(List<String> keys, String targetValue, ObjectNode jsonObject, ObjectNode resultObject) {
         ObjectMapper objectMapper = new ObjectMapper();
         int sum = keys.stream()
-                .map(e -> JsonNodeALL.getALL(jsonObject, e).asInt())
+                .map(e -> JsonUtil.get(jsonObject, e).asInt())
                 .mapToInt(Integer::intValue)
                 .sum();
 

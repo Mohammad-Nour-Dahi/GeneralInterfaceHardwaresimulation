@@ -2,7 +2,7 @@ package gihs.core.generalInterfaceHardwaresimulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOFJsonNodeALL.JsonUtil;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -11,7 +11,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import gihs.gem5.parser.Gem5Parser;
-import gihs.core.parser.ParserInterface;
+import gihs.core.hardwaresimulationManagementWithDocker.ParserInterface;
 import gihs.sniper.parser.SniperParser;
 import gihs.zsim.parser.ZsimParser;
 
@@ -103,9 +103,9 @@ public class GeneralInterfaceHardwaresimulation {
         String hardwareSimulationName = null;
 
         // Check if the JSON node contains the specified key
-        if (JsonNodeALL.hasALL(rootNode, "commonParameters.hardwaresimulation.name")) {
+        if (JsonUtil.has(rootNode, "commonParameters.hardwaresimulation.name")) {
             // Retrieve the hardware simulation name from the JSON node
-            hardwareSimulationName = JsonNodeALL.getALL(rootNode, "commonParameters.hardwaresimulation.name").asText();
+            hardwareSimulationName = JsonUtil.get(rootNode, "commonParameters.hardwaresimulation.name").asText();
         } else {
             // Key not found, print an error message
             System.out.println("The key 'commonParameters.hardwaresimulation.name' was not found in the JSON file.");

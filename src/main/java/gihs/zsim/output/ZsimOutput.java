@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import gihs.core.output.GenerateOutputParametersAbstract;
-import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOFJsonNodeALL.JsonUtil;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -122,8 +122,8 @@ public class ZsimOutput extends GenerateOutputParametersAbstract {
 
         // Iterate over the parameterMap and update the resultJson with matching values from the jsonObject
         parameterMap.forEach((key, outputParameter) -> {
-            if (JsonNodeALL.hasALL(jsonStatsFromSimulation, key)) {
-                JsonNode value = JsonNodeALL.getALL(jsonStatsFromSimulation, key);
+            if (JsonUtil.has(jsonStatsFromSimulation, key)) {
+                JsonNode value = JsonUtil.get(jsonStatsFromSimulation, key);
                 resultStatsJson.set(outputParameter, value);
             }
         });

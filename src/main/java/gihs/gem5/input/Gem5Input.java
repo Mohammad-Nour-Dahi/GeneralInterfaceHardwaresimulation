@@ -2,7 +2,7 @@ package gihs.gem5.input;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import gihs.core.input.GenerateInputParametersAbstract;
-import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOFJsonNodeALL.JsonUtil;
 
 /**
  * The Gem5Input class implements the GenerateInputParameters interface to generate input code
@@ -28,10 +28,10 @@ public class Gem5Input extends GenerateInputParametersAbstract {
         StringBuilder cfgCodeBuilder = null;
         try {
 
-        String memorySize = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.memory.size").asText();
-        String startingCoreType = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.processor.starting_core_type").asText();
-        String switchCoreType = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.processor.switch_core_type").asText();
-        String isa = JsonNodeALL.getALL(parametersFormInputJSON, "gem5.processor.isa").asText();
+        String memorySize = JsonUtil.get(parametersFormInputJSON, "gem5.memory.size").asText();
+        String startingCoreType = JsonUtil.get(parametersFormInputJSON, "gem5.processor.starting_core_type").asText();
+        String switchCoreType = JsonUtil.get(parametersFormInputJSON, "gem5.processor.switch_core_type").asText();
+        String isa = JsonUtil.get(parametersFormInputJSON, "gem5.processor.isa").asText();
 
 
         cfgCodeBuilder = new StringBuilder();

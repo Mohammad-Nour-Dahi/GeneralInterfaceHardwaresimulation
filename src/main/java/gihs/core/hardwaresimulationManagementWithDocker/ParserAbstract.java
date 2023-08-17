@@ -1,8 +1,8 @@
-package gihs.core.parser;
+package gihs.core.hardwaresimulationManagementWithDocker;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import gihs.core.input.GenerateInputParametersFile;
-import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOFJsonNodeALL.JsonUtil;
 import gihs.core.managementOfDockerfiles.HardwaresimulationDocker;
 import gihs.core.output.GenerateOutputParametersFile;
 
@@ -109,27 +109,24 @@ public abstract class ParserAbstract implements ParserInterface {
         try {
 
 
-            statsOutputPath = JsonNodeALL.getALL(input, "commonParameters.hardwaresimulation.statsOutputPath").asText();
-            programPath = JsonNodeALL.getALL(input, "commonParameters.hardwaresimulation.programPath").asText();
-            binaryPath = JsonNodeALL.getALL(input, "commonParameters.hardwaresimulation.binaryPath").asText();
+            statsOutputPath = JsonUtil.get(input, "commonParameters.hardwaresimulation.statsOutputPath").asText();
+            programPath = JsonUtil.get(input, "commonParameters.hardwaresimulation.programPath").asText();
+            binaryPath = JsonUtil.get(input, "commonParameters.hardwaresimulation.binaryPath").asText();
 
-            if (!isValidPath(programPath)) {
-                System.err.println("Invalid programPath: " + programPath);
-                System.exit(1);
+            if (isInvalidPath(programPath)) {
+                throw new Exception("Invalid programPath");
             }
 
-            if (!isValidPath(binaryPath)) {
-                System.err.println("Invalid binaryPath: " + binaryPath);
-                System.exit(1);
+            if (isInvalidPath(binaryPath)) {
+                throw new Exception("Invalid binaryPath");
             }
             fileName = new File(programPath).getName();
             command = "./" + fileName.replaceAll("\\.c", "");
             // Implementation of the parsing and simulation logic using Docker
 
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             // Handle the case when the JsonNode is null
-            System.err.println("Error: The \"commonParameters.hardwaresimulation\" section contains a null JsonNode. Please ensure that the input data is correctly formatted and all required fields are provided in the \"commonParameters.hardwaresimulation\" section.");
-            System.exit(1);
+            throw new NullPointerException("Error: The \"commonParameters.hardwaresimulation\" section contains a null JsonNode. Please ensure that the input data is correctly formatted and all required fields are provided in the \"commonParameters.hardwaresimulation\" section.");
         }
     }
 
@@ -138,24 +135,24 @@ public abstract class ParserAbstract implements ParserInterface {
      */
     protected void exit() {
         // Close the hardware simulation container
-        host.closeDockerHardwaresimulation(containerId);
+        hardwaresimulation.closeDockerHardwaresimulation();
 
         // Delete the hardware simulation container
-        host.deleteDockerHardwaresimulation(containerId);
+        hardwaresimulation.deleteDockerHardwaresimulation();
     }
 
     /**
-     * Checks if the given path is a valid and existing path in the filesystem.
+     * Checks if the given path is invalid and the existing path is not in the filesystem.
      *
      * @param path The path to be checked.
-     * @return {@code true} if the path is valid and exists in the filesystem, {@code false} otherwise.
+     * @return {@code true} If the path is invalid and exists not in the filesystem, {@code false} otherwise.
      */
-    private boolean isValidPath(String path) {
+    private boolean isInvalidPath(String path) {
         // Use Paths.get to convert the path string to a Path object
         Path p = Paths.get(path);
 
         // Check if the path is absolute and exists in the filesystem
-        return p.isAbsolute() && Files.exists(p);
+        return !(p.isAbsolute() && Files.exists(p));
     }
 
 }
