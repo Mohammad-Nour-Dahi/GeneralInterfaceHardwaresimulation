@@ -1,8 +1,8 @@
 package parserHardwaresimulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import input.Gem5Input;
-import output.Gem5Output;
+import gihs.gem5.input.Gem5Input;
+import gihs.gem5.output.Gem5Output;
 
 /**
  * The Gem5Parser class is responsible for parsing and running the Gem5 hardware simulation with input and output.

@@ -144,7 +144,7 @@ public abstract class GenerateOutputParametersImplements implements GenerateOutp
      * @param resultJson       The ObjectNode representing the result JSON.
      */
     protected void calculateRate(String cacheAccessesKey, String cacheMissesKey, String rateKey, ObjectNode resultJson) {
-        resultJson.put(rateKey, roundToTwoDecimals(divideNumbers(cacheAccessesKey, cacheMissesKey, resultJson)) + "%");
+        resultJson.put(rateKey, roundToTwoDecimals(divideNumbers(cacheMissesKey, cacheAccessesKey, resultJson)*100) + "%");
 
     }
     /**

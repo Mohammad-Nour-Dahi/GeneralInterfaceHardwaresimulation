@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.output.GenerateOutputParametersImplements;
+import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

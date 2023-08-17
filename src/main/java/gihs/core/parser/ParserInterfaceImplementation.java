@@ -1,10 +1,10 @@
 package parserHardwaresimulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import input.GenerateInputParametersFile;
-import managementOFJsonNodeALL.JsonNodeALL;
-import managementOfDockerfiles.HardwaresimulationDocker;
-import output.GenerateOutputParametersFile;
+import gihs.core.input.GenerateInputParametersFile;
+import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOfDockerfiles.HardwaresimulationDocker;
+import gihs.core.output.GenerateOutputParametersFile;
 
 import java.io.File;
 import java.nio.file.Files;

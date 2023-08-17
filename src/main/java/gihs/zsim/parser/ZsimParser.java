@@ -1,6 +1,7 @@
 package parserHardwaresimulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import gihs.core.parser.ParserInterfaceImplementation;
 import input.ZsimInput;
 import output.ZsimOutput;
 

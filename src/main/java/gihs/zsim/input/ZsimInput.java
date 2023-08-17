@@ -1,7 +1,8 @@
 package input;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.input.GenerateInputParametersImplementation;
+import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
 
 /**
  * The ZsimInput class implements the GenerateInputParameters interface to generate input code
@@ -41,7 +42,7 @@ public class ZsimInput extends GenerateInputParametersImplementation {
 
 
             cfgCodeBuilder.append("// Example zsim config file\n");
-            cfgCodeBuilder.append("// Models a hypothetical Skylake-like 32-core CMP, 64MB shared LLC, mesh network, 6-channel DDR4\n\n");
+            // cfgCodeBuilder.append("// Models a hypothetical Skylake-like 32-core CMP, 64MB shared LLC, mesh network, 6-channel DDR4\n\n");
 
             cfgCodeBuilder.append("sim = {\n");
             cfgCodeBuilder.append("    domains = 1;\n");

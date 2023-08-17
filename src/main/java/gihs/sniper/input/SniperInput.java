@@ -1,7 +1,7 @@
 package input;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.input.GenerateInputParametersImplementation;
 
 /**
  * The SniperInput class implements the GenerateInputParameters interface to generate input code
