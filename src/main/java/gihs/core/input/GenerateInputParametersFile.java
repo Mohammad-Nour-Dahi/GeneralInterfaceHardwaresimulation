@@ -28,8 +28,8 @@ public class GenerateInputParametersFile {
             generateCode = generateInputParameters.generateInputCode();
 
             // Write the generated code to a file
-            File pythonFile = new File(generateHardwaresimulationInputParametersPath);
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(pythonFile))) {
+            File newFile = new File(generateHardwaresimulationInputParametersPath);
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(newFile))) {
                 writer.write(generateCode);
                 System.out.println("Input file was generated successfully.");
             }
