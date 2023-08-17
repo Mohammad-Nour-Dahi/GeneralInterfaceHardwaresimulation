@@ -1,14 +1,14 @@
-package org.generalInterfaceHardwaresimulation;
+package gihs.core.generalInterfaceHardwaresimulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
-import parserHardwaresimulation.Gem5Parser;
-import parserHardwaresimulation.ParserInterface;
-import parserHardwaresimulation.SniperParser;
-import parserHardwaresimulation.ZsimParser;
+import gihs.gem5.parser.Gem5Parser;
+import gihs.core.parser.ParserInterface;
+import gihs.sniper.parser.SniperParser;
+import gihs.zsim.parser.ZsimParser;
 
 import java.io.File;
 import java.io.IOException;

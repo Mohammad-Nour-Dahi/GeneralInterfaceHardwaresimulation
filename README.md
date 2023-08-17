@@ -21,26 +21,26 @@ The figure presents a high-level representation of a generic interface designed 
 
 
 
-# Installation
+
+## Figure: General Interface to Class of Hardware Simulations
+![Figure: General Interface to Class of Hardware Simulations](/images/StrukturdesgesamtenSoftwareentwurfsfürdieallgemeineSchnittstelle.png)
 
 
 
+
+
+
+
+
+## Prerequisites: Installing Docker, Java, and Maven
+To run this project, you need to have Docker, Java and Maven installed on your system. Follow the instructions below to install both components:
+
+
+### Installing Docker
 - [Docker](https://www.docker.com/get-started/) installieren
 
 
-
-```
-git clone https://github.com/Mohammad-Nour-Dahi/generalInterfaceHardwaresimulation.git 
-```
-
-## Installing Java and Maven
-
-To run this project, you need to have Java and Maven installed on your system. Follow the instructions below to install both components:
-
 ### Installing Java
-
-
-
 1. Go to the official Java website: [https://www.oracle.com/java/](https://www.oracle.com/java/).
 2. Download the 17th version of Java for your operating system.
 3. Run the installation wizard and follow the instructions to install Java on your system.
@@ -51,12 +51,27 @@ To run this project, you need to have Java and Maven installed on your system. F
 By setting the JAVA_HOME variable and checking the Java version, you can ensure that the installation of Java 17 was successful.
 
 ### Installing Maven
-
 1. Go to the official Maven website: [https://maven.apache.org/](https://maven.apache.org/).
 2. Download the latest version of Maven.
 3. Extract the downloaded archive to a location of your choice.
 4. Add the `bin` directory of the extracted Maven package to the `PATH` environment variable.
 5. Verify the Maven installation by running the command `mvn -version` in a terminal or command prompt. You should see the installed Maven version displayed.
+
+
+
+
+
+
+
+
+## Installation general Interface Hardwaresimulation
+
+```
+git clone https://github.com/Mohammad-Nour-Dahi/generalInterfaceHardwaresimulation.git 
+```
+
+
+
 
 
 # Execution

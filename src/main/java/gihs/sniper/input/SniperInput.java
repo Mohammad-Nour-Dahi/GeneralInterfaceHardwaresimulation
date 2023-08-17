@@ -1,4 +1,4 @@
-package input;
+package gihs.sniper.input;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import gihs.core.input.GenerateInputParametersImplementation;

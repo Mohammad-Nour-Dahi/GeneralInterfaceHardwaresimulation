@@ -1,4 +1,4 @@
-package output;
+package gihs.zsim.output;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

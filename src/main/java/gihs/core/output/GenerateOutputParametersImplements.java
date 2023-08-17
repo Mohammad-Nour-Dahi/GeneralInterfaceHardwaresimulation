@@ -1,9 +1,9 @@
-package output;
+package gihs.core.output;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public abstract class GenerateOutputParametersImplements implements GenerateOutp
      * Default constructor for GenerateOutputParametersImplements.
      * Initializes the ObjectMapper.
      */
-    GenerateOutputParametersImplements() {
+    protected GenerateOutputParametersImplements() {
         objectMapper = new ObjectMapper();
 
 

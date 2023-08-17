@@ -1,4 +1,4 @@
-package managementOfDockerfiles;
+package gihs.core.managementOfDockerfiles;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.*;

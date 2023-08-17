@@ -1,4 +1,4 @@
-package parserHardwaresimulation;
+package gihs.core.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

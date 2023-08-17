@@ -1,4 +1,4 @@
-package managementOFJsonNodeALL;
+package gihs.core.managementOFJsonNodeALL;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

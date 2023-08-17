@@ -1,4 +1,4 @@
-package input;
+package gihs.core.input;
 
 import java.io.BufferedWriter;
 import java.io.File;

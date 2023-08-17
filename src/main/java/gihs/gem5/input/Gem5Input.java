@@ -1,8 +1,8 @@
-package input;
+package gihs.gem5.input;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import gihs.core.input.GenerateInputParametersImplementation;
-import managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
 
 /**
  * The Gem5Input class implements the GenerateInputParameters interface to generate input code

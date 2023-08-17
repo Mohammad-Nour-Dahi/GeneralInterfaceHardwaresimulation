@@ -1,4 +1,4 @@
-package parserHardwaresimulation;
+package gihs.core.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import gihs.core.input.GenerateInputParametersFile;
@@ -74,7 +74,7 @@ public abstract class ParserInterfaceImplementation implements ParserInterface {
      * and the GenerateInputParametersFile and GenerateOutputParametersFile objects
      * for hardware simulation parsing.
      */
-    ParserInterfaceImplementation() {
+    protected ParserInterfaceImplementation() {
         // Create a new instance of the HardwaresimulationDocker class
         this.hardwaresimulation = new HardwaresimulationDocker();
 

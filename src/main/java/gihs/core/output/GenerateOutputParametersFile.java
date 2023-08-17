@@ -1,4 +1,4 @@
-package output;
+package gihs.core.output;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

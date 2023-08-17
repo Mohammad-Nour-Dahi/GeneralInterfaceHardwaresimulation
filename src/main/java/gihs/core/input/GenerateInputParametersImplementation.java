@@ -1,7 +1,7 @@
-package input;
+package gihs.core.input;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import managementOFJsonNodeALL.JsonNodeALL;
+import gihs.core.managementOFJsonNodeALL.JsonNodeALL;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -73,7 +73,7 @@ public abstract class GenerateInputParametersImplementation implements GenerateI
      *
      * @param parametersFormInputJSON The JSON input containing the parameters for generating input.
      */
-    GenerateInputParametersImplementation(JsonNode parametersFormInputJSON) {
+    protected GenerateInputParametersImplementation(JsonNode parametersFormInputJSON) {
         try {
             this.parametersFormInputJSON = parametersFormInputJSON;
             JsonNode cacheHierarchy = parametersFormInputJSON.get("commonParameters").get("cache_hierarchy");

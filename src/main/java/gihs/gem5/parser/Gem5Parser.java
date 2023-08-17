@@ -1,6 +1,7 @@
-package parserHardwaresimulation;
+package gihs.gem5.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import gihs.core.parser.ParserInterfaceImplementation;
 import gihs.gem5.input.Gem5Input;
 import gihs.gem5.output.Gem5Output;
 

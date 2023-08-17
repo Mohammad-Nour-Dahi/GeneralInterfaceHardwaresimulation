@@ -1,4 +1,4 @@
-package output;
+package gihs.core.output;
 
 /**
  * The GenerateOutputParameters interface defines the contract for generating

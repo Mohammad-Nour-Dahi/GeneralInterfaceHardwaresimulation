@@ -1,4 +1,4 @@
-package output;
+package gihs.gem5.output;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -31,6 +31,7 @@ public class Gem5Output extends GenerateOutputParametersImplements {
      * Constructs a Gem5Output object and initializes the parameter map with additional entries.
      */
     public Gem5Output() {
+
 
         parameterMap.put("board.cache_hierarchy.ruby_system.l1_controllers0.L1Icache.m_demand_accesses", "Cache Summary.Cache L1-I.num cache accesses");
         parameterMap.put("board.cache_hierarchy.ruby_system.l1_controllers1.L1Icache.m_demand_accesses", "Cache Summary.Cache L1-I.num cache accesses");

@@ -1,4 +1,4 @@
-package input;
+package gihs.core.input;
 
 /**
  * The GenerateInputParameters interface defines a contract for generating input code based on JSON data.
