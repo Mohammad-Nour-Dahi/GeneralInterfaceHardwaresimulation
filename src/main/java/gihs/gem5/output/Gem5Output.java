@@ -21,20 +21,16 @@ import java.util.Map;
  */
 public class Gem5Output extends GenerateOutputParametersAbstract {
     private static final double NANOSECONDS_IN_SECOND = 1.0e9;
-    private Map<String, String> parameterMap = new HashMap<>(Map.of(
-            "simInsts", "Instructions",
-            "board.processor.start0.core.numCycles", "Cycles",
-            "simSeconds", "Time (ns)",
-            "hostSeconds","HostNanoseconds"
-
-    ));
+    private Map<String, String> parameterMap = new HashMap<>();
 
     /**
      * Constructs a Gem5Output object and initializes the parameter map with additional entries.
      */
     public Gem5Output() {
-
-
+        parameterMap.put("simInsts", "Instructions");
+        parameterMap.put("board.processor.start0.core.numCycles", "Cycles");
+        parameterMap.put("simSeconds", "Time (ns)");
+        parameterMap.put("hostSeconds","HostNanoseconds");
         parameterMap.put("board.cache_hierarchy.ruby_system.l1_controllers0.L1Icache.m_demand_accesses", "Cache Summary.Cache L1-I.num cache accesses");
         parameterMap.put("board.cache_hierarchy.ruby_system.l1_controllers1.L1Icache.m_demand_accesses", "Cache Summary.Cache L1-I.num cache accesses");
         parameterMap.put("board.cache_hierarchy.ruby_system.l1_controllers0.L1Icache.m_demand_misses", "Cache Summary.Cache L1-I.num cache misses");
