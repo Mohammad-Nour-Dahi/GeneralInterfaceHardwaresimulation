@@ -46,7 +46,7 @@ To run this project, you need to have Docker, Java and Maven installed on your s
 
 
 ### Installing Java
-1. Go to the official Java website: [https://www.oracle.com/java/](https://www.oracle.com/java/).
+1. Go to the official Java website: [https://www.oracle.com/java/technologies/downloads/#java17](https://www.oracle.com/java/technologies/downloads/#java17).
 2. Download the 17th version of Java for your operating system.
 3. Run the installation wizard and follow the instructions to install Java on your system.
 4. Set the `JAVA_HOME` environment variable to the path of the `java-17-openjdk-amd64` directory.
@@ -56,7 +56,7 @@ To run this project, you need to have Docker, Java and Maven installed on your s
 By setting the JAVA_HOME variable and checking the Java version, you can ensure that the installation of Java 17 was successful.
 
 ### Installing Maven
-1. Go to the official Maven website: [https://maven.apache.org/](https://maven.apache.org/).
+1. Go to the official Maven website: [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi).
 2. Download the latest version of Maven.
 3. Extract the downloaded archive to a location of your choice.
 4. Add the `bin` directory of the extracted Maven package to the `PATH` environment variable.
