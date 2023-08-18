@@ -55,35 +55,67 @@ public class Gem5Output extends GenerateOutputParametersAbstract {
      */
     @Override
     public String generateStatisticsParametersJson(String filePath) {
-        ObjectNode jsonOutputParameter = generateStatisticsJson(filePath);
-        ObjectNode resultJson = objectMapper.createObjectNode();
+        ObjectNode jsonStatsFromSimulation = generateStatisticsJson(filePath);
+        ObjectNode resultStatsJson = objectMapper.createObjectNode();
 
         parameterMap.forEach((key, outputParameter) -> {
-            if (jsonOutputParameter.has(key)) {
-                JsonNode value = jsonOutputParameter.get(key);
+            if (jsonStatsFromSimulation.has(key)) {
+                JsonNode value = jsonStatsFromSimulation.get(key);
                 if (outputParameter.equals("Cycles") || outputParameter.equals("Instructions")) {
-                    resultJson.put(outputParameter, value.asInt());
+                    resultStatsJson.put(outputParameter, value.asInt());
                 } else {
-                    resultJson.set(outputParameter, value);
+                    resultStatsJson.set(outputParameter, value);
                 }
             }
         });
 
-        // num cache misses = l1_controllers0.L1Icache.m_demand_misses + l1_controllers1.L1Icache.m_demand_misses
-        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L1-I.num cache misses"), "Cache Summary.Cache L1-I.num cache misses", jsonOutputParameter, resultJson);
-        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L1-D.num cache misses"), "Cache Summary.Cache L1-D.num cache misses", jsonOutputParameter, resultJson);
-        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L2.num cache misses"), "Cache Summary.Cache L2.num cache misses", jsonOutputParameter, resultJson);
 
-        calculateSimulationResultGem5AndZsim(parameterMap, jsonOutputParameter, resultJson);
+
+        // num cache misses = l1_controllers0.L1Icache.m_demand_misses + l1_controllers1.L1Icache.m_demand_misses
+        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L1-I.num cache misses"), "Cache Summary.Cache L1-I.num cache misses", jsonStatsFromSimulation, resultStatsJson);
+        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L1-D.num cache misses"), "Cache Summary.Cache L1-D.num cache misses", jsonStatsFromSimulation, resultStatsJson);
+        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L2.num cache misses"), "Cache Summary.Cache L2.num cache misses", jsonStatsFromSimulation, resultStatsJson);
+
+
+// Num cache accesses
+        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L1-I.num cache accesses"),
+                "Cache Summary.Cache L1-I.num cache accesses", jsonStatsFromSimulation, resultStatsJson);
+        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L1-D.num cache accesses"),
+                "Cache Summary.Cache L1-D.num cache accesses", jsonStatsFromSimulation, resultStatsJson);
+        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L2.num cache accesses"),
+                "Cache Summary.Cache L2.num cache accesses", jsonStatsFromSimulation, resultStatsJson);
+
+        // Calculate cache miss rates
+        calculateRate("Cache Summary.Cache L2.num cache accesses", "Cache Summary.Cache L2.num cache misses",
+                "Cache Summary.Cache L2.miss rate", resultStatsJson);
+        calculateRate("Cache Summary.Cache L1-D.num cache accesses", "Cache Summary.Cache L1-D.num cache misses",
+                "Cache Summary.Cache L1-D.miss rate", resultStatsJson);
+        calculateRate("Cache Summary.Cache L1-I.num cache accesses", "Cache Summary.Cache L1-I.num cache misses",
+                "Cache Summary.Cache L1-I.miss rate", resultStatsJson);
+
+        // Calculate MPKI
+        calculateMPKI("Instructions", "Cache Summary.Cache L2.num cache misses", "Cache Summary.Cache L2.mpki",
+                resultStatsJson);
+        calculateMPKI("Instructions", "Cache Summary.Cache L1-D.num cache misses", "Cache Summary.Cache L1-D.mpki",
+                resultStatsJson);
+        calculateMPKI("Instructions", "Cache Summary.Cache L1-I.num cache misses", "Cache Summary.Cache L1-I.mpki",
+                resultStatsJson);
+
+        // Calculate IPC
+        resultStatsJson.put("IPC", roundToTwoDecimals(divideNumbers("Instructions", "Cycles", resultStatsJson)));
+
+
+
+
 
         // Multiply the value of "Time (ns)" in resultJson by NANOSECONDS_IN_SECOND
-        resultJson.put("Time (ns)", findPropertyValue(resultJson, "Time (ns)").asDouble() * NANOSECONDS_IN_SECOND);
+        resultStatsJson.put("Time (ns)", findPropertyValue(resultStatsJson, "Time (ns)").asDouble() * NANOSECONDS_IN_SECOND);
         // Multiply the value of "HostNanoseconds" in resultJson by NANOSECONDS_IN_SECOND
-        resultJson.put("HostNanoseconds", findPropertyValue(resultJson, "HostNanoseconds").asDouble() * NANOSECONDS_IN_SECOND);
+        resultStatsJson.put("HostNanoseconds", findPropertyValue(resultStatsJson, "HostNanoseconds").asDouble() * NANOSECONDS_IN_SECOND);
 
         String outputResultJson = "";
         try {
-            outputResultJson = objectMapper.writer().with(SerializationFeature.INDENT_OUTPUT).writeValueAsString(resultJson);
+            outputResultJson = objectMapper.writer().with(SerializationFeature.INDENT_OUTPUT).writeValueAsString(resultStatsJson);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

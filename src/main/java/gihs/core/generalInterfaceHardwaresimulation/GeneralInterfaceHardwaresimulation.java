@@ -28,8 +28,8 @@ public class GeneralInterfaceHardwaresimulation {
     /**
      * Runs the simulation based on the command line arguments.
      * Performs different actions based on the hardware simulation name.
-     * @param optionsCommandLine The command line arguments.
      *
+     * @param optionsCommandLine The command line arguments.
      */
     public void simulation(String[] optionsCommandLine) {
         String jsonFilePath = getJsonFilePath(optionsCommandLine);
@@ -113,7 +113,6 @@ public class GeneralInterfaceHardwaresimulation {
 
         return hardwareSimulationName;
     }
-
 
 
     /**

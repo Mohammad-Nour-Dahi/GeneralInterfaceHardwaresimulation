@@ -195,41 +195,6 @@ public abstract class GenerateOutputParametersAbstract implements GenerateOutput
         return null;
     }
 
-    /**
-     * Calculates simulation results for the Gem5 and Zsim simulations based on the given parameter map and statistics JSON.
-     *
-     * @param parameterMap            The parameter map containing the keys and target values to consider.
-     * @param jsonStatsFromSimulation The JSON object containing the simulation statistics.
-     * @param resultStatsJson         The JSON object to store the calculated results.
-     */
-    protected void calculateSimulationResultGem5AndZsim(Map<String, String> parameterMap, ObjectNode jsonStatsFromSimulation, ObjectNode resultStatsJson) {
-        // Num cache accesses
-        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L1-I.num cache accesses"),
-                "Cache Summary.Cache L1-I.num cache accesses", jsonStatsFromSimulation, resultStatsJson);
-        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L1-D.num cache accesses"),
-                "Cache Summary.Cache L1-D.num cache accesses", jsonStatsFromSimulation, resultStatsJson);
-        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L2.num cache accesses"),
-                "Cache Summary.Cache L2.num cache accesses", jsonStatsFromSimulation, resultStatsJson);
-
-        // Calculate cache miss rates
-        calculateRate("Cache Summary.Cache L2.num cache accesses", "Cache Summary.Cache L2.num cache misses",
-                "Cache Summary.Cache L2.miss rate", resultStatsJson);
-        calculateRate("Cache Summary.Cache L1-D.num cache accesses", "Cache Summary.Cache L1-D.num cache misses",
-                "Cache Summary.Cache L1-D.miss rate", resultStatsJson);
-        calculateRate("Cache Summary.Cache L1-I.num cache accesses", "Cache Summary.Cache L1-I.num cache misses",
-                "Cache Summary.Cache L1-I.miss rate", resultStatsJson);
-
-        // Calculate MPKI
-        calculateMPKI("Instructions", "Cache Summary.Cache L2.num cache misses", "Cache Summary.Cache L2.mpki",
-                resultStatsJson);
-        calculateMPKI("Instructions", "Cache Summary.Cache L1-D.num cache misses", "Cache Summary.Cache L1-D.mpki",
-                resultStatsJson);
-        calculateMPKI("Instructions", "Cache Summary.Cache L1-I.num cache misses", "Cache Summary.Cache L1-I.mpki",
-                resultStatsJson);
-
-        // Calculate IPC
-        resultStatsJson.put("IPC", roundToTwoDecimals(divideNumbers("Instructions", "Cycles", resultStatsJson)));
-    }
 
 
 }

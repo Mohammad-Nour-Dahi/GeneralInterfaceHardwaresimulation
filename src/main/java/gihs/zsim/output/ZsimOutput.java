@@ -137,9 +137,34 @@ public class ZsimOutput extends GenerateOutputParametersAbstract {
         addKeysWithSameValue(getKeysWithSameValue(parameterMap, "HostNanoseconds"),
                 "HostNanoseconds", jsonStatsFromSimulation, resultStatsJson);
 
+// Num cache accesses
+        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L1-I.num cache accesses"),
+                "Cache Summary.Cache L1-I.num cache accesses", jsonStatsFromSimulation, resultStatsJson);
+        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L1-D.num cache accesses"),
+                "Cache Summary.Cache L1-D.num cache accesses", jsonStatsFromSimulation, resultStatsJson);
+        addKeysWithSameValue(getKeysWithSameValue(parameterMap, "Cache Summary.Cache L2.num cache accesses"),
+                "Cache Summary.Cache L2.num cache accesses", jsonStatsFromSimulation, resultStatsJson);
 
-        calculateSimulationResultGem5AndZsim(parameterMap, jsonStatsFromSimulation, resultStatsJson);
-        try {
+        // Calculate cache miss rates
+        calculateRate("Cache Summary.Cache L2.num cache accesses", "Cache Summary.Cache L2.num cache misses",
+                "Cache Summary.Cache L2.miss rate", resultStatsJson);
+        calculateRate("Cache Summary.Cache L1-D.num cache accesses", "Cache Summary.Cache L1-D.num cache misses",
+                "Cache Summary.Cache L1-D.miss rate", resultStatsJson);
+        calculateRate("Cache Summary.Cache L1-I.num cache accesses", "Cache Summary.Cache L1-I.num cache misses",
+                "Cache Summary.Cache L1-I.miss rate", resultStatsJson);
+
+        // Calculate MPKI
+        calculateMPKI("Instructions", "Cache Summary.Cache L2.num cache misses", "Cache Summary.Cache L2.mpki",
+                resultStatsJson);
+        calculateMPKI("Instructions", "Cache Summary.Cache L1-D.num cache misses", "Cache Summary.Cache L1-D.mpki",
+                resultStatsJson);
+        calculateMPKI("Instructions", "Cache Summary.Cache L1-I.num cache misses", "Cache Summary.Cache L1-I.mpki",
+                resultStatsJson);
+
+        // Calculate IPC
+        resultStatsJson.put("IPC", roundToTwoDecimals(divideNumbers("Instructions", "Cycles", resultStatsJson)));
+
+         try {
             // Create an ObjectWriter with indentation enabled
             ObjectWriter objectWriter = objectMapper.writer().with(SerializationFeature.INDENT_OUTPUT);
             outputResultJson = objectWriter.writeValueAsString(resultStatsJson);
