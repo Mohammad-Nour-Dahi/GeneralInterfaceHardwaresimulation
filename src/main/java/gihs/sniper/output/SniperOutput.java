@@ -12,7 +12,9 @@ import gihs.core.managementOFJsonNodeALL.JsonUtil;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * The SniperOutput class extends GenerateOutputParametersImplements and represents a class for generating Sniper output.

@@ -22,10 +22,15 @@ The figure presents a high-level representation of a generic interface designed 
 
 
 
-## Figure: General Interface to Class of Hardware Simulations
+## Figure: Structure of the Entire Software Design for the General Interface
 ![Figure: General Interface to Class of Hardware Simulations](/images/StrukturdesgesamtenSoftwareentwurfsfürdieallgemeineSchnittstelle.png)
 
 
+The software design for the general interface encompasses a system of interacting classes that collaboratively fulfill the functionalities. The primary focal point is the `GeneralInterfaceHardwaresimulation` class, housing the crucial `simulation` method. The method takes a central role in choosing the appropriate "ParserStrategy" based on the provided `args` argument, which is args as options CommandLine , which has path to json input file. The chosen `ParserStrategy` invokes the `parse` method. The `ParserAbstract` abstract class forms the basis of this strategy, implementing the `parse` method. This abstraction gives rise to three specific implementations: `SniperParser`, `Gem5Parser`, and `ZSimParser`. Each derived class tailors the `parse` method to their unique requirements, reflective of the distinct configurations and operations inherent to each hardware simulation.
+
+The `HardwaresimulationDocker` class offers an interface to execute hardware simulations within Docker containers. It encapsulates methods such as `createHardwareSimulationContainer` and `startHardwareSimulationContainer`, facilitating seamless interactions with the container environment.
+
+Within the `input` and `output` packages, you will find the `GenerateInputParametersFile` and `GenerateOutputParametersFile` classes. These components are responsible for generating input and output parameter files, tightly integrated with their respective parser counterparts.
 
 
 

@@ -11,7 +11,7 @@ public interface ParserInterface {
    /**
     * Parses the input and performs the hardware simulation.
     *
-    * @param input the input value for the hardware simulation
+    * @param input the input JsonNode for the hardware simulation
     */
    public void parse(JsonNode input);
 }
