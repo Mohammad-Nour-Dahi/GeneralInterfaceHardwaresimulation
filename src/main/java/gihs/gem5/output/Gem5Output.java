@@ -167,7 +167,6 @@ public class Gem5Output extends GenerateOutputParametersAbstract {
      */
     @Override
     protected void addKeysWithSameValue(List<String> keys, String targetValue, ObjectNode jsonObject, ObjectNode resultObject) {
-        ObjectMapper objectMapper = new ObjectMapper();
         int sum = keys.stream()
                 .map(e -> jsonObject.get(e).asInt())
                 .mapToInt(Integer::intValue)

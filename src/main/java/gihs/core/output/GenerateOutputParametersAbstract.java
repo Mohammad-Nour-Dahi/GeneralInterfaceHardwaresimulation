@@ -19,7 +19,7 @@ public abstract class GenerateOutputParametersAbstract implements GenerateOutput
      * The objectMapper field is an instance of the ObjectMapper class from the Jackson library,
      * which is used for converting Java objects to JSON strings.
      */
-    protected ObjectMapper objectMapper;
+    protected static ObjectMapper objectMapper;
 
 
     /**
