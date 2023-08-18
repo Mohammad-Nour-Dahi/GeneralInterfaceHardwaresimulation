@@ -25,15 +25,7 @@ public class ZsimOutput extends GenerateOutputParametersAbstract {
     /**
      * Mapping of parameter keys to output parameter names
      */
-    private Map<String, String> parameterMap = new HashMap<>(Map.of(
-            "root.skylake.skylake-0.instrs", "Instructions",
-            "root.skylake.skylake-0.cycles", "Cycles",
-            "root.contention.domain-0.time", "Time (ns)",
-            "root.time.init","HostNanoseconds",
-            "root.time.bound","HostNanoseconds",
-            "root.time.weave","HostNanoseconds"
-
-    ));
+    private Map<String, String> parameterMap = new HashMap<>();
 
     /**
      * List of cache miss values for Cache Summary.Cache L1-D.
@@ -52,6 +44,12 @@ public class ZsimOutput extends GenerateOutputParametersAbstract {
      * Initializes the parameter map with additional mappings.
      */
     public ZsimOutput() {
+        parameterMap.put("root.skylake.skylake-0.instrs", "Instructions");
+        parameterMap.put("root.skylake.skylake-0.cycles", "Cycles");
+        parameterMap.put("root.contention.domain-0.time", "Time (ns)");
+        parameterMap.put("root.time.init","HostNanoseconds");
+        parameterMap.put("root.time.bound","HostNanoseconds");
+        parameterMap.put("root.time.weave","HostNanoseconds");
 
         // The value of "Cache Summary.Cache L1-D.num cache accesses" is the sum of these keys: fhGETS fhGETX hGETS hGETX mGETS mGETXIM mGETXSM
         parameterMap.put("root.l1d.l1d-0.fhGETS", "Cache Summary.Cache L1-D.num cache accesses");

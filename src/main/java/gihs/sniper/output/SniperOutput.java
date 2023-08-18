@@ -12,11 +12,7 @@ import gihs.core.managementOFJsonNodeALL.JsonUtil;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The SniperOutput class extends GenerateOutputParametersImplements and represents a class for generating Sniper output.
@@ -24,21 +20,34 @@ import java.util.Map;
  * based on a given file path.
  */
 public class SniperOutput extends GenerateOutputParametersAbstract {
-    // List of parameter names to be included in the output JSON
-    List<String> parameterList = new ArrayList<>(Arrays.asList(
-            "Time (ns)", "Instructions", "Cycles", "IPC",
-            "Cache Summary.Cache L1-I.num cache misses",
-            "Cache Summary.Cache L1-D.num cache accesses",
-            "Cache Summary.Cache L2.num cache misses",
-            "Cache Summary.Cache L1-I.num cache accesses",
-            "Cache Summary.Cache L1-D.num cache misses",
-            "Cache Summary.Cache L2.num cache accesses",
-            "Cache Summary.Cache L2.miss rate",
-            "Cache Summary.Cache L1-D.miss rate",
-            "Cache Summary.Cache L1-I.miss rate",
-            "Cache Summary.Cache L2.mpki",
-            "Cache Summary.Cache L1-D.mpki",
-            "Cache Summary.Cache L1-I.mpki"));
+    // Map of parameter names to be included in the output JSON
+    private Map<String, String> parameterMap = new HashMap<>();
+
+
+
+    /**
+     * Constructs a SniperOutput object and initializes the parameter map with additional entries.
+     */
+    public SniperOutput(){
+        parameterMap.put("Time (ns)","Time (ns)");
+        parameterMap.put("Instructions","Instructions");
+        parameterMap.put("Cycles","Cycles");
+        parameterMap.put("IPC","IPC");
+        parameterMap.put("Cache Summary.Cache L1-I.num cache misses","Cache Summary.Cache L1-I.num cache misses");
+        parameterMap.put("Cache Summary.Cache L1-D.num cache accesses","Cache Summary.Cache L1-D.num cache accesses");
+        parameterMap.put("Cache Summary.Cache L2.num cache misses","Cache Summary.Cache L2.num cache misses");
+        parameterMap.put("Cache Summary.Cache L1-I.num cache accesses", "Cache Summary.Cache L1-I.num cache accesses");
+        parameterMap.put("Cache Summary.Cache L1-D.num cache misses", "Cache Summary.Cache L1-D.num cache misses");
+        parameterMap.put("Cache Summary.Cache L2.num cache accesses","Cache Summary.Cache L2.num cache accesses");
+        parameterMap.put("Cache Summary.Cache L2.miss rate","Cache Summary.Cache L2.miss rate");
+        parameterMap.put("Cache Summary.Cache L1-D.miss rate", "Cache Summary.Cache L1-D.miss rate");
+        parameterMap.put("Cache Summary.Cache L1-I.miss rate","Cache Summary.Cache L1-I.miss rate");
+        parameterMap.put("Cache Summary.Cache L2.mpki", "Cache Summary.Cache L2.mpki");
+        parameterMap.put("Cache Summary.Cache L1-D.mpki","Cache Summary.Cache L1-D.mpki");
+        parameterMap.put( "Cache Summary.Cache L1-I.mpki", "Cache Summary.Cache L1-I.mpki");
+
+    }
+
 
     /**
      * Generate a JSON parameter that uses a specified file path.
@@ -61,21 +70,22 @@ public class SniperOutput extends GenerateOutputParametersAbstract {
             e.printStackTrace();
         }
 
-        // Iterate through the parameterList and add parameters to the resultJson
-        for (String parameter : parameterList) {
-            if (JsonUtil.has(generateHardwaresimulationOutputParametersJson, parameter)) {
-                JsonNode value = JsonUtil.get(generateHardwaresimulationOutputParametersJson, parameter);
+
+        JsonNode finalGenerateHardwaresimulationOutputParametersJson = generateHardwaresimulationOutputParametersJson;
+        // Iterate through the parameterMap and add parameters to the resultJson
+        parameterMap.forEach((key, outputParameter) -> {
+            if (JsonUtil.has(finalGenerateHardwaresimulationOutputParametersJson,outputParameter)) {
+                JsonNode value = JsonUtil.get(finalGenerateHardwaresimulationOutputParametersJson,key);
                 //Adds a percent symbol (%) to the value of a parameter that ends with "rate".
-                if (parameter.endsWith("rate")) {
+                if (outputParameter.endsWith("rate")) {
                     String valueWithPercent = value.asText() + "%";
-                    resultJson.put(parameter, valueWithPercent);
+                    resultJson.put(outputParameter, valueWithPercent);
                 } else {
-                    resultJson.set(parameter, value);
+                    resultJson.set(outputParameter, value);
                 }
-
-
             }
-        }
+        });
+
 
         try {
             // Convert the resultJson to a formatted JSON string
