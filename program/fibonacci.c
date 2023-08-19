@@ -1,5 +1,12 @@
 #include <stdio.h>
 
+
+/*
+ * Calculates the nth Fibonacci number.
+ *
+ * @param n The index of the Fibonacci number to calculate.
+ * @return The nth Fibonacci number.
+ */
 long long fibonacci(int n) {
     if (n <= 1)
         return n;
@@ -16,7 +23,7 @@ long long fibonacci(int n) {
 }
 
 int main() {
-    int n = 30; // Calculate the first 20 Fibonacci numbers
+    int n = 30; // Calculate the first 30 Fibonacci numbers
 
     printf("The first %d Fibonacci numbers are:\n", n);
     int i;
