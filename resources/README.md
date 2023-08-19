@@ -10,7 +10,7 @@
 
 
 ## Figure: General Interface to Class of Hardware Simulations
-![Figure: General Interface to Class of Hardware Simulations](/images/GeneralInterfaceToClassOfHardwaresimulations)
+![Figure: General Interface to Class of Hardware Simulations](../images/GeneralInterfaceToClassOfHardwaresimulations.png)
 
 
 The figure presents a high-level representation of a generic interface designed specifically for a class of hardware simulations. In the center of the figure, various hardware simulations such as [ZSim](https://github.com/dzhang50/zsim-plusplus), [gem5](https://github.com/gem5/gem5) and [Sniper](https://github.com/snipersim/snipersim). are depicted, which are supported by the interface.
@@ -23,7 +23,7 @@ The figure presents a high-level representation of a generic interface designed 
 
 
 ## Figure: Structure of the Entire Software Design for the General Interface
-![Figure: General Interface to Class of Hardware Simulations](/images/StrukturdesgesamtenSoftwareentwurfsfürdieallgemeineSchnittstelle)
+![Figure: General Interface to Class of Hardware Simulations](../images/StrukturdesgesamtenSoftwareentwurfsfürdieallgemeineSchnittstelle.png)
 
 
 The software design for the general interface encompasses a system of interacting classes that collaboratively fulfill the functionalities. The primary focal point is the `GeneralInterfaceHardwaresimulation` class, housing the crucial `simulation` method. The method takes a central role in choosing the appropriate "ParserStrategy" based on the provided `args` argument, which is args as options CommandLine , which has path to json input file. The chosen `ParserStrategy` invokes the `parse` method. The `ParserAbstract` abstract class forms the basis of this strategy, implementing the `parse` method. This abstraction gives rise to three specific implementations: `SniperParser`, `Gem5Parser`, and `ZSimParser`. Each derived class tailors the `parse` method to their unique requirements, reflective of the distinct configurations and operations inherent to each hardware simulation.
