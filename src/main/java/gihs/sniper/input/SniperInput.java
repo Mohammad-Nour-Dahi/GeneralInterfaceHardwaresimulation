@@ -25,7 +25,7 @@ public class SniperInput extends GenerateInputParametersAbstract {
     @Override
     public String generateInputCode() {
         StringBuilder cfgCodeBuilder = null;
-        try {
+
 
             // Add general section
             cfgCodeBuilder = new StringBuilder();
@@ -169,10 +169,7 @@ public class SniperInput extends GenerateInputParametersAbstract {
             cfgCodeBuilder.append("[power]\n");
             cfgCodeBuilder.append("vdd = 1.0 \n");
             cfgCodeBuilder.append("technology_node = 22 \n");
-        } catch (NullPointerException e) {
-            // Handle the case when the JsonNode is null
-            System.err.println("Error: The \"sniper\" section contains a null JsonNode. Please ensure that the input data is correctly formatted and all required fields are provided in the \"sniper\" section.");
-        }
+
         return cfgCodeBuilder.toString();
     }
 }

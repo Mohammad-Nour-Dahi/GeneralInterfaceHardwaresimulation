@@ -8,6 +8,7 @@ import gihs.core.output.GenerateOutputParametersFile;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -106,7 +107,7 @@ public abstract class ParserAbstract implements ParserInterface {
      */
     @Override
     public void parse(JsonNode input) {
-        try {
+
 
 
             statsOutputPath = JsonUtil.get(input, "commonParameters.hardwaresimulation.statsOutputPath").asText();
@@ -114,20 +115,17 @@ public abstract class ParserAbstract implements ParserInterface {
             binaryPath = JsonUtil.get(input, "commonParameters.hardwaresimulation.binaryPath").asText();
 
             if (isInvalidPath(programPath)) {
-                throw new Exception("Invalid programPath");
+                throw new NullPointerException("Invalid programPath :" +programPath);
             }
 
             if (isInvalidPath(binaryPath)) {
-                throw new Exception("Invalid binaryPath");
+                throw new NullPointerException("Invalid binaryPath: "+binaryPath);
             }
             fileName = new File(programPath).getName();
             command = "./" + fileName.replaceAll("\\.c", "");
             // Implementation of the parsing and simulation logic using Docker
 
-        } catch (Exception e) {
-            // Handle the case when the JsonNode is null
-            throw new NullPointerException("Error: The \"commonParameters.hardwaresimulation\" section contains a null JsonNode. Please ensure that the input data is correctly formatted and all required fields are provided in the \"commonParameters.hardwaresimulation\" section.");
-        }
+
     }
 
     /**
@@ -148,8 +146,15 @@ public abstract class ParserAbstract implements ParserInterface {
      * @return {@code true} If the path is invalid and exists not in the filesystem, {@code false} otherwise.
      */
     private boolean isInvalidPath(String path) {
+        Path p = null;
         // Use Paths.get to convert the path string to a Path object
-        Path p = Paths.get(path);
+       try {
+            p = Paths.get(path);
+       }catch (InvalidPathException e){
+           System.err.println(e);
+           return true;
+
+       }
 
         // Check if the path is absolute and exists in the filesystem
         return !(p.isAbsolute() && Files.exists(p));

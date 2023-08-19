@@ -26,7 +26,7 @@ public class Gem5Input extends GenerateInputParametersAbstract {
     @Override
     public String generateInputCode() {
         StringBuilder cfgCodeBuilder = null;
-        try {
+
 
         String memorySize = JsonUtil.get(parametersFormInputJSON, "gem5.memory.size").asText();
         String startingCoreType = JsonUtil.get(parametersFormInputJSON, "gem5.processor.starting_core_type").asText();
@@ -80,13 +80,7 @@ public class Gem5Input extends GenerateInputParametersAbstract {
 
         cfgCodeBuilder.append("simulator = Simulator(board=board)\n");
         cfgCodeBuilder.append("simulator.run()\n");
-    } catch(
-    NullPointerException e)
 
-    {
-        // Handle the case when the JsonNode is null
-        System.err.println("Error: The \"gem5\" section contains a null JsonNode. Please ensure that the input data is correctly formatted and all required fields are provided in the \"gem5\" section.");
-    }
         return cfgCodeBuilder.toString();
 }
 }

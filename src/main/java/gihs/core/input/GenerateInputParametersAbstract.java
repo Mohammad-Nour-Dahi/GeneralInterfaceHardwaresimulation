@@ -5,6 +5,7 @@ import gihs.core.managementOFJsonNodeALL.JsonUtil;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -74,7 +75,7 @@ public abstract class GenerateInputParametersAbstract implements GenerateInputPa
      * @param parametersFormInputJSON The JSON input containing the parameters for generating input.
      */
     protected GenerateInputParametersAbstract(JsonNode parametersFormInputJSON) {
-        try {
+
             this.parametersFormInputJSON = parametersFormInputJSON;
             JsonNode cacheHierarchy = parametersFormInputJSON.get("commonParameters").get("cache_hierarchy");
             this.l1dSize = cacheHierarchy.get("l1d_size").asText();
@@ -85,18 +86,15 @@ public abstract class GenerateInputParametersAbstract implements GenerateInputPa
             this.l2Assoc = cacheHierarchy.get("l2_assoc").asInt();
             this.frequency = JsonUtil.get(parametersFormInputJSON, "commonParameters.board.frequency").asText();
             String programPath = JsonUtil.get(parametersFormInputJSON, "commonParameters.hardwaresimulation.programPath").asText();
-            if (!isValidPath(programPath)) {
-                System.err.println("Invalid programPath: " + programPath);
+            if (isInvalidPath(programPath)) {
                 System.exit(1);
+
             }
 
             String fileName = new File(programPath).getName();
             this.command = "./" + fileName.replaceAll("\\.c", "");
 
-        } catch (NullPointerException e) {
-            System.err.println("Error: The \"commonParameters\" section contains a null JsonNode. Please ensure that the input data is correctly formatted and all required fields are provided in the \"commonParameters\" section.");
-            System.exit(1);
-        }
+
     }
 
 
@@ -128,28 +126,31 @@ public abstract class GenerateInputParametersAbstract implements GenerateInputPa
      */
     protected String convertToMegahertz(String frequency) {
         int gigahertz = 0;
-        try {
+
             String gigahertzValue = frequency.replaceAll("[^0-9]", "");
             gigahertz = Integer.parseInt(gigahertzValue);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
+
         int megahertz = gigahertz * 1000;
         return String.valueOf(megahertz);
     }
 
     /**
-     * Checks if the given path is a valid and existing path in the filesystem.
+     * Checks if the given path is invalid and the existing path is not in the filesystem.
      *
      * @param path The path to be checked.
-     * @return {@code true} if the path is valid and exists in the filesystem, {@code false} otherwise.
+     * @return {@code true} If the path is invalid and exists not in the filesystem, {@code false} otherwise.
      */
-    private boolean isValidPath(String path) {
+    private boolean isInvalidPath(String path) {
+        Path p = null;
         // Use Paths.get to convert the path string to a Path object
-        Path p = Paths.get(path);
+        try {
+            p = Paths.get(path);
+        }catch (InvalidPathException e){
+            return true;
+        }
 
         // Check if the path is absolute and exists in the filesystem
-        return p.isAbsolute() && Files.exists(p);
+        return !(p.isAbsolute() && Files.exists(p));
     }
 
 

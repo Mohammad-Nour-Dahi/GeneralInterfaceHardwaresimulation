@@ -22,7 +22,7 @@ public class GenerateInputParametersFile {
                                         String generateHardwaresimulationInputParametersPath) {
         String generateCode;
 
-        try {
+
             // Load the JSON file
 
             generateCode = generateInputParameters.generateInputCode();
@@ -31,11 +31,12 @@ public class GenerateInputParametersFile {
             File newFile = new File(generateHardwaresimulationInputParametersPath);
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(newFile))) {
                 writer.write(generateCode);
-                System.out.println("Input file was generated successfully.");
+            }catch (IOException e){
+                System.err.println("An error occurred while writing the generated code from the input JSON to a file : "+e);
             }
+                System.out.println("Input file was generated successfully.");
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+
     }
 }

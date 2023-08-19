@@ -36,7 +36,7 @@ public class ZsimInput extends GenerateInputParametersAbstract {
     @Override
     public String generateInputCode() {
         StringBuilder cfgCodeBuilder = null;
-        try {
+
 
             cfgCodeBuilder = new StringBuilder();
 
@@ -130,10 +130,7 @@ public class ZsimInput extends GenerateInputParametersAbstract {
             cfgCodeBuilder.append("    command =\"" + command + "\";\n");
             cfgCodeBuilder.append("    //startFastForwarded = True;\n");
             cfgCodeBuilder.append("};\n");
-        } catch (NullPointerException e) {
-            // Handle the case when the JsonNode is null
-            System.err.println("Error: The \"zsim\" section contains a null JsonNode. Please ensure that the input data is correctly formatted and all required fields are provided in the \"zsim\" section.");
-        }
+
         return cfgCodeBuilder.toString();
     }
 

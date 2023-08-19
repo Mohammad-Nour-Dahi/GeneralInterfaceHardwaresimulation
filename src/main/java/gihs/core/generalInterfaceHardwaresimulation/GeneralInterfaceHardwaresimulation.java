@@ -15,8 +15,10 @@ import gihs.core.hardwaresimulationManagementWithDocker.ParserInterface;
 import gihs.sniper.parser.SniperParser;
 import gihs.zsim.parser.ZsimParser;
 
+import javax.xml.bind.ValidationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +26,55 @@ import java.util.Map;
  * The main class for the general interface of hardware simulation.
  */
 public class GeneralInterfaceHardwaresimulation {
+
+    /**
+     * Array of required parameters for the general interface.
+     * Each parameter is specified in a hierarchical format, representing its location in the JSON structure.
+     */
+    private static final String[] requiredParameters = {
+            // Common Parameters
+            "commonParameters.hardwaresimulation.name",
+            "commonParameters.hardwaresimulation.programPath",
+            "commonParameters.hardwaresimulation.binaryPath",
+            "commonParameters.hardwaresimulation.statsOutputPath",
+            "commonParameters.cache_hierarchy.l1d_size",
+            "commonParameters.cache_hierarchy.l1d_assoc",
+            "commonParameters.cache_hierarchy.l1i_size",
+            "commonParameters.cache_hierarchy.l1i_assoc",
+            "commonParameters.cache_hierarchy.l2_size",
+            "commonParameters.cache_hierarchy.l2_assoc",
+            "commonParameters.board.frequency",
+
+            // Gem5 Parameters
+            "gem5.memory.size",
+            "gem5.processor.starting_core_type",
+            "gem5.processor.switch_core_type",
+            "gem5.processor.isa",
+
+            // Sniper Parameters
+            "sniper.perf_model/core.logical_cpus",
+            "sniper.perf_model/core.type",
+            "sniper.perf_model/itlb.size",
+            "sniper.perf_model/itlb.associativity",
+            "sniper.perf_model/dtlb.size",
+            "sniper.perf_model/dtlb.associativity",
+            "sniper.perf_model/stlb.size",
+            "sniper.perf_model/stlb.associativity",
+            "sniper.perf_model/dram_directory.total_entries",
+            "sniper.perf_model/dram_directory.associativity",
+
+            // ZSim Parameters
+            "zsim.lineSize",
+            "zsim.caches.l1d.latency",
+            "zsim.caches.l1i.latency",
+            "zsim.caches.l2.mshrs",
+            "zsim.caches.l2.latency",
+            "zsim.mem.splitAddrs",
+            "zsim.mem.closedPage",
+            "zsim.mem.controllerLatency",
+            "zsim.mem.controllers"
+    };
+
 
     /**
      * Runs the simulation based on the provided command line arguments.
@@ -34,9 +85,17 @@ public class GeneralInterfaceHardwaresimulation {
      *                           -help             Display help
      *                           -jsonFile <arg>   Path to the JSON file
      */
-    public void simulation(String[] optionsCommandLine) {
-        String jsonFilePath = getJsonFilePath(optionsCommandLine);
-        JsonNode jsonFileRootNode = getJsonFileRootNode(jsonFilePath);
+    public static void simulationRun(String[] optionsCommandLine) {
+        String jsonFilePath;
+        JsonNode jsonFileRootNode = null;
+        try {
+            jsonFilePath = getJsonFilePath(optionsCommandLine);
+            jsonFileRootNode = getJsonFileRootNode(jsonFilePath);
+            JsonUtil.validateJsonInput(jsonFileRootNode, requiredParameters);
+        } catch (ArithmeticException e) {
+            System.err.println("error: " + e.getMessage());
+            return; // Exit the method if validation fails
+        }
 
         String hardwareSimulationName = getHardwareSimulationName(jsonFileRootNode);
 
@@ -51,7 +110,11 @@ public class GeneralInterfaceHardwaresimulation {
         // Check if a valid parser strategy was found.
         if (parserStrategy != null) {
             // Call the 'parse' method on the selected parser strategy object, passing in the 'rootNode'.
-            parserStrategy.parse(jsonFileRootNode);
+           try {
+               parserStrategy.parse(jsonFileRootNode);
+           }catch (NullPointerException e) {
+               System.err.println(e);
+           }
         } else {
             // If the hardware simulation name is not recognized, print an error message.
             System.out.println("Invalid value for 'commonParameters.hardwaresimulation.name' in the JSON file.");
@@ -64,25 +127,33 @@ public class GeneralInterfaceHardwaresimulation {
      * @param inputOptions The command line arguments.
      * @return The path to the JSON file, or null if not specified.
      */
-    private String getJsonFilePath(String[] inputOptions) {
+    private static String getJsonFilePath(String[] inputOptions) {
         String jsonFilePath = null;
         Options options = createOptions();
 
         CommandLineParser parser = new DefaultParser();
-        try {
-            CommandLine cmd = parser.parse(options, inputOptions);
 
-            if (cmd.hasOption("help")) {
-                printHelp(options);
+        CommandLine cmd = null;
+        try {
+            cmd = parser.parse(options, inputOptions);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (cmd.hasOption("help")) {
+
+                    printHelp(options);
+
             } else if (cmd.hasOption("jsonFile")) {
                 jsonFilePath = cmd.getOptionValue("jsonFile");
 
             } else {
-                System.out.println("The 'jsonFile' option was not specified. Use the 'help' option for more information.");
-            }
-        } catch (ParseException e) {
-            System.out.println("Error parsing the command line arguments: " + e.getMessage());
+
+                throw new ArithmeticException("\""+ cmd.getArgList().get(0)+"\" is not recognized as an option. Use \"help\" for more information.");
+
+
         }
+
         return jsonFilePath;
     }
 
@@ -92,12 +163,12 @@ public class GeneralInterfaceHardwaresimulation {
      * @param jsonFilePath The path to the JSON file.
      * @return The root JSON node, or null if there was an error reading the file.
      */
-    private JsonNode getJsonFileRootNode(String jsonFilePath) {
+    private static JsonNode getJsonFileRootNode(String jsonFilePath) {
         JsonNode rootNode = null;
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             rootNode = objectMapper.readTree(new File(jsonFilePath));
-        } catch (IOException e) {
+        } catch (NullPointerException | IOException e) {
             System.out.println("Error reading the JSON file: " + e.getMessage());
         }
         return rootNode;
@@ -109,7 +180,7 @@ public class GeneralInterfaceHardwaresimulation {
      * @param rootNode The root JSON node of the configuration.
      * @return The hardware simulation name, or null if the key is not found.
      */
-    private String getHardwareSimulationName(JsonNode rootNode) {
+    private static String getHardwareSimulationName(JsonNode rootNode) {
         String hardwareSimulationName = null;
 
         // Check if the JSON node contains the specified key
@@ -127,10 +198,13 @@ public class GeneralInterfaceHardwaresimulation {
 
     /**
      * Creates the command line options for the program.
+     * Possible options include:
+     *                                -help             Display help
+     *                                -jsonFile <arg>   Path to the JSON file
      *
      * @return the Options object containing the command line options
      */
-    private Options createOptions() {
+    private static Options createOptions() {
         Options options = new Options();
         options.addOption("jsonFile", true, "Path to the JSON file");
         options.addOption("help", false, "Display help");
@@ -142,7 +216,7 @@ public class GeneralInterfaceHardwaresimulation {
      *
      * @param options the Options object containing the command line options
      */
-    private void printHelp(Options options) {
+    private static void printHelp(Options options) {
         HelpFormatter formatter = new HelpFormatter();
         String readmeContent = "";
 
@@ -150,10 +224,16 @@ public class GeneralInterfaceHardwaresimulation {
             File readmeFile = new File("../resources/README.md");
             readmeContent = FileUtils.readFileToString(readmeFile, "UTF-8");
         } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                throw new Exception("Error reading README file: " + e.getMessage());
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+            // Stop further processing since there's an error
         }
 
         formatter.printHelp("General Interface Hardwaresimulation", readmeContent, options, "");
+        System.exit(1);
     }
 
     /**
@@ -165,8 +245,7 @@ public class GeneralInterfaceHardwaresimulation {
         // Capture the start time
         long startTime = System.nanoTime();
 
-        GeneralInterfaceHardwaresimulation generalHardwaresimulation = new GeneralInterfaceHardwaresimulation();
-        generalHardwaresimulation.simulation(args);
+        GeneralInterfaceHardwaresimulation.simulationRun(args);
 
         // Capture the end time
         long endTime = System.nanoTime();
