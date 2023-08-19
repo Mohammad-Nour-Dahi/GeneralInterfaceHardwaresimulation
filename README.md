@@ -66,26 +66,33 @@ By setting the JAVA_HOME variable and checking the Java version, you can ensure 
 
 
 
+## Installing and Building General Interface for Hardware Simulation
 
 
-
-## Installation general Interface Hardwaresimulation
+### Installation general Interface Hardwaresimulation
 
 ```
 git clone https://github.com/Mohammad-Nour-Dahi/generalInterfaceHardwaresimulation.git 
 ```
 
+### Build the general interface
+To build the program, please follow these steps:
+
+1. Open a terminal or command prompt.
+2. Navigate to the `GeneralInterfaceHardwaresimulation` directory.
+3. Run the following command to install all the required dependencies and build the project:
+```bash
+mvn install
+```
 
 
+## Execution
 
-
-# Execution
-
-## Creating an Input File
+### Creating an Input File
  
 - To execute the program, you need to create an input file in JSON format that contains the input parameters for the execution. An example file can be found at resources as [HardwaresimulationParameter.json](/resources/HardwaresimulationParameter.json). You can use this file to run the generic interface.
 
-## Running a C-Program in Hardware Simulation
+### Running a C-Program in Hardware Simulation
 
 - To execute the C-program in the hardware simulation, you may need to update the paths for the program and binary file. 
 - You can run the example program by creating a file named `outputStats` in the root directory `D` and copying or moving the `program` directory from the `GeneralInterfaceHardwaresimulation` directory to the `outputStats` directory.
@@ -116,17 +123,9 @@ git clone https://github.com/Mohammad-Nour-Dahi/generalInterfaceHardwaresimulati
 Please ensure that the specified directories and files exist and provide valid paths for the hardware simulation.
 
 
-### Running the Program
+### Running the general interface
 
-To run the program, please follow these steps:
-
-1. Open a terminal or command prompt.
-2. Navigate to the `GeneralInterfaceHardwaresimulation` directory.
-3. Run the following command to install all the required dependencies and build the project:
-```bash
-mvn install
-```
-After running mvn install, a target file will be generated containing the executable program `GeneralInterfaceHardwaresimulation-1.0-SNAPSHOT-jar-with-dependencies.jar`. To execute the program, navigate to the `target` directory by running:
+After running `mvn install`, a target file will be generated containing the executable program `GeneralInterfaceHardwaresimulation-1.0-SNAPSHOT-jar-with-dependencies.jar`. To execute the program, navigate to the `target` directory by running:
 
 ```bash
 cd target
