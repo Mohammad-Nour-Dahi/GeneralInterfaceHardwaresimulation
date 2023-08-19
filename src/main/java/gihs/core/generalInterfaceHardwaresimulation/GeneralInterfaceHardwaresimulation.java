@@ -26,10 +26,13 @@ import java.util.Map;
 public class GeneralInterfaceHardwaresimulation {
 
     /**
-     * Runs the simulation based on the command line arguments.
-     * Performs different actions based on the hardware simulation name.
+     * Runs the simulation based on the provided command line arguments.
+     * Executes various actions depending on the hardware simulation name.
      *
      * @param optionsCommandLine The command line arguments.
+     *                           Possible options include:
+     *                           -help             Display help
+     *                           -jsonFile <arg>   Path to the JSON file
      */
     public void simulation(String[] optionsCommandLine) {
         String jsonFilePath = getJsonFilePath(optionsCommandLine);
@@ -55,6 +58,12 @@ public class GeneralInterfaceHardwaresimulation {
         }
     }
 
+    /**
+     * Retrieves the path to the JSON file from the command line options.
+     *
+     * @param inputOptions The command line arguments.
+     * @return The path to the JSON file, or null if not specified.
+     */
     private String getJsonFilePath(String[] inputOptions) {
         String jsonFilePath = null;
         Options options = createOptions();
@@ -78,9 +87,10 @@ public class GeneralInterfaceHardwaresimulation {
     }
 
     /**
-     * Processes the JSON file and performs actions based on the content.
+     * Retrieves the root JSON node from the JSON file.
      *
      * @param jsonFilePath The path to the JSON file.
+     * @return The root JSON node, or null if there was an error reading the file.
      */
     private JsonNode getJsonFileRootNode(String jsonFilePath) {
         JsonNode rootNode = null;
@@ -94,10 +104,10 @@ public class GeneralInterfaceHardwaresimulation {
     }
 
     /**
-     * Retrieves the hardware simulation name from the JSON node.
+     * Retrieves the hardware simulation name from the JSON configuration.
      *
-     * @param rootNode The root node of the JSON data.
-     * @return The hardware simulation name, or null if not found.
+     * @param rootNode The root JSON node of the configuration.
+     * @return The hardware simulation name, or null if the key is not found.
      */
     private String getHardwareSimulationName(JsonNode rootNode) {
         String hardwareSimulationName = null;
