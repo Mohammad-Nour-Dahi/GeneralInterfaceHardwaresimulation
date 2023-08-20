@@ -69,6 +69,7 @@ public abstract class ParserAbstract implements ParserInterface {
      */
     protected String fileName;
 
+
     /**
      * Constructor for the ParserInterfaceImplementation class.
      * Initializes the HardwaresimulationDocker objects
@@ -158,6 +159,44 @@ public abstract class ParserAbstract implements ParserInterface {
 
         // Check if the path is absolute and exists in the filesystem
         return !(p.isAbsolute() && Files.exists(p));
+    }
+
+
+    /**
+     * Handles the output console for specific error messages.
+     *
+     * @param errorMessages An array of error messages to search for in the output console.
+     * @param outputConsole The console output to analyze for error messages.
+     */
+    protected void handleOutputConsole(String [] errorMessages,String outputConsole) {
+        for (String errorMessage : errorMessages) {
+            if (containsErrorMessage(outputConsole, errorMessage)) {
+                exitWithError(errorMessage);
+            }
+        }
+    }
+
+
+    /**
+     * Checks if the output console contains a specific error message.
+     *
+     * @param outputConsole The console output to analyze.
+     * @param errorMessage  The error message to search for.
+     * @return True if the error message is present in the output console, otherwise false.
+     */
+    private boolean containsErrorMessage(String outputConsole, String errorMessage) {
+        return outputConsole.contains(errorMessage);
+    }
+
+    /**
+     * Prints an error message and exits the program.
+     *
+     * @param errorMessage The error message to display.
+     */
+    private void exitWithError(String errorMessage) {
+        System.err.println(errorMessage + " encountered. Exiting the program.");
+        exit();
+        System.exit(1);
     }
 
 }

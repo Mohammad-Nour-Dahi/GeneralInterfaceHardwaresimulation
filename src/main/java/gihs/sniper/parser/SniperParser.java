@@ -11,6 +11,18 @@ import gihs.sniper.output.SniperOutput;
 public class SniperParser extends ParserAbstract {
 
     /**
+     * Array of error messages that indicate various configuration issues.
+     */
+    private static final String[] ERROR_MESSAGES = {
+            "Invalid cache configuration",
+            "Caches of non-power of 2 size",
+            "*** Configuration error ***",
+            "Error",
+            "ERROR"
+    };
+
+
+    /**
      * Parses the input and runs the Sniper hardware simulation using Docker
      *
      * @param input the input value
@@ -36,42 +48,13 @@ public class SniperParser extends ParserAbstract {
         // Calculate the execution time (difference between end time and start time)
         long executionTime = endTime - startTime;
         // host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"cat", "sim.out"}));
-        handleOutputConsole(outputConsole);
+        handleOutputConsole(ERROR_MESSAGES,outputConsole);
 
         host.outputFileFromContainer(containerId, "usr/local/src/sniper/sim.out", "../resources/"+SniperOut);
 
         generateOutputParametersFile.generateOutputParameters(new SniperOutput(), "../resources/"+SniperOut, statsOutputPath + "/generatestatsOutputSniper.json","\"HostNanoseconds\" : "+executionTime);
 
         exit();
-    }
-    /**
-     * Handles the output console and performs error handling based on its content.
-     *
-     * @param outputConsole The output console string.
-     */
-    private void handleOutputConsole(String outputConsole) {
-        if (outputConsole.contains("Invalid cache configuration")) {
-            System.err.println("Invalid cache configuration encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        }else if (outputConsole.contains("Caches of non-power of 2 size")) {
-            System.err.println("Caches of non-power of 2 size encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        }else if (outputConsole.contains("*** Configuration error ***")) {
-            System.err.println("Configuration error encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        }else if (outputConsole.contains("ERROR")) {
-            System.err.println("ERROR encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        }else if (outputConsole.contains("Error")) {
-            System.err.println("ERROR encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        }
-
     }
 
 }

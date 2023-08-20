@@ -11,6 +11,16 @@ import gihs.gem5.output.Gem5Output;
 public class Gem5Parser extends ParserAbstract {
 
     /**
+     * Array of error messages that indicate various configuration issues.
+     */
+    protected static final String[] ERROR_MESSAGES = {
+            "AttributeError",
+            "Number of leaves must be non-zero and a power of 2",
+            "Exception"
+            };
+
+
+    /**
      * Parses the input and runs the Gem5 hardware simulation using Docker.
      *
      * @param input the input value
@@ -33,7 +43,7 @@ public class Gem5Parser extends ParserAbstract {
         host.inputFileTOContainer(containerId, binaryPath, "usr/local/src/gem5/");
         String outputConsole = host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"build/X86/gem5.opt", "--stats-file=" + gem5Stats, "configs/learning_gem5/part1/generateGem5Parameter.py"}));
         //host.outputFromHardwaresimulationConsole( hardwaresimulation.command(new String[]{"cat", "m5out/" + gem5Stats}));
-        handleOutputConsole(outputConsole);
+        handleOutputConsole(ERROR_MESSAGES,outputConsole);
 
 
         host.outputFileFromContainer(containerId, "usr/local/src/gem5/m5out/" + gem5Stats, "../resources/" + gem5Stats);
@@ -44,21 +54,5 @@ public class Gem5Parser extends ParserAbstract {
 
     }
 
-    /**
-     * Handles the output console and performs error handling based on its content.
-     *
-     * @param outputConsole The output console string.
-     */
-    private void handleOutputConsole(String outputConsole) {
-        if (outputConsole.contains("AttributeError")) {
-            System.err.println("AttributeError encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        } else if (outputConsole.contains("Exception")) {
-            System.err.println("Exception encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        }
-    }
 
 }

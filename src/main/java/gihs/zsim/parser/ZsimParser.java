@@ -7,10 +7,22 @@ import gihs.zsim.output.ZsimOutput;
 
 public class ZsimParser extends ParserAbstract {
 
+    /**
+     * Array of error messages that indicate various configuration issues.
+     */
+    protected static final String[] ERROR_MESSAGES = {
+            "Bank size must be a multiple of line size",
+            "Number of sets must be a power of two",
+            "error: syntax error",
+            "Unsupported line size",
+            "can't connect more cores to it",
+            "error"
+    };
 
     @Override
     public void parse(JsonNode input) {
         super.parse(input);
+        ERROR_MESSAGES[0] = "ni";
 
         String generateHardwaresimulationParameter = "zsim.cfg";
         String zsim_out = "zsim.out";
@@ -25,10 +37,10 @@ public class ZsimParser extends ParserAbstract {
         host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"scons", "-j16"}));
         host.inputFileTOContainer(containerId, programPath, "/usr/local/src/zsim-plusplus/");
         String outputConsoleCompile = host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"gcc", "-static", "-std=c99", "-o", fileName.replaceAll("\\.c", ""), fileName}));
-        handleOutputConsole(outputConsoleCompile);
+        handleOutputConsole(ERROR_MESSAGES,outputConsoleCompile);
         String outputConsole = host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"./build/opt/zsim", "tests/" + generateHardwaresimulationParameter}));
 
-        handleOutputConsole(outputConsole);
+        handleOutputConsole(ERROR_MESSAGES,outputConsole);
 
         // host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"cat", "/usr/local/src/zsim-plusplus/zsim.out"}));
 
@@ -38,39 +50,6 @@ public class ZsimParser extends ParserAbstract {
 
         exit();
 
-    }
-
-    /**
-     * Handles the output console and performs error handling based on its content.
-     *
-     * @param outputConsole The output console string.
-     */
-    private void handleOutputConsole(String outputConsole) {
-        if (outputConsole.contains("Bank size must be a multiple of line size")) {
-            System.err.println("Bank size must be a multiple of line size encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        } else if (outputConsole.contains("Number of sets must be a power of two")) {
-            System.err.println("Number of sets must be a power of two encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        } else if (outputConsole.contains("error: syntax error")) {
-            System.err.println("Syntax error encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        } else if (outputConsole.contains("Unsupported line size")) {
-            System.err.println("Unsupported line size encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        } else if (outputConsole.contains("can't connect more cores to it")) {
-            System.err.println("Can't connect more cores to it encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        } else if (outputConsole.contains("error")) {
-            System.err.println("error encountered. Exiting the program.");
-            exit();
-            System.exit(1);
-        }
     }
 
 
