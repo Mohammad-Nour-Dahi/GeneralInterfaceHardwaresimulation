@@ -11,7 +11,8 @@ import gihs.sniper.output.SniperOutput;
 public class SniperParser extends ParserAbstract {
 
     /**
-     * Array of error messages that indicate various configuration issues.
+     *   Array of error messages that indicate various configuration issues.
+     *
      */
     private static final String[] ERROR_MESSAGES = {
             "Invalid cache configuration",

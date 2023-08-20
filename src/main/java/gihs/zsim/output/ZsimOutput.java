@@ -227,17 +227,20 @@ public class ZsimOutput extends GenerateOutputParametersAbstract {
      * @return A modified JSON object representing Zsim statistics.
      */
     private ObjectNode getZsimJson(ObjectNode statistics) {
-        // Create the newStatistics object
+        // Create the newStatistics object to hold the transformed JSON
         ObjectNode newStatistics = objectMapper.createObjectNode();
 
-        // Iterate over the fields in the statistics object
-        Iterator<Map.Entry<String, JsonNode>> iterator = statistics.fields();
+        // Create block objects to hold different levels of nested JSON
         ObjectNode block = objectMapper.createObjectNode();
         ObjectNode innerBlock = objectMapper.createObjectNode();
         ObjectNode innerInnerBlock = objectMapper.createObjectNode();
+
+        // Initialize variables to track current keys and levels
         String blockKey = "";
         String innerBlockKey = "";
 
+        // Iterate over the fields in the input statistics object
+        Iterator<Map.Entry<String, JsonNode>> iterator = statistics.fields();
 
         while (iterator.hasNext()) {
             Map.Entry<String, JsonNode> entry = iterator.next();
@@ -246,7 +249,9 @@ public class ZsimOutput extends GenerateOutputParametersAbstract {
 
             // Check the pattern of the key and organize the JSON structure accordingly
             if (key.matches(" [a-zA-Z].*")) {
+                // Handling main block or element
                 if (!blockKey.isEmpty()) {
+                    // Handling nested blocks or elements
                     if (value.isNull()) {
                         innerBlock = objectMapper.createObjectNode();
                         innerInnerBlock = objectMapper.createObjectNode();
@@ -261,10 +266,11 @@ public class ZsimOutput extends GenerateOutputParametersAbstract {
                     newStatistics.set(key.trim(), value);
                 }
             } else if (key.matches("  [a-zA-Z].*")) {
+                // Handling inner block
                 if (!innerBlockKey.isEmpty()) {
+                    // Handling nested inner blocks
                     if (value.isNull()) {
                         innerInnerBlock = objectMapper.createObjectNode();
-
                     }
                     if (!value.isNull()) {
                         innerBlock.set(key.trim(), value);
@@ -275,17 +281,20 @@ public class ZsimOutput extends GenerateOutputParametersAbstract {
                     innerInnerBlock.set(key.trim(), value);
                 }
             } else if (key.matches("[a-zA-Z].*")) {
+                // Handling outer block
                 blockKey = key.trim();
                 block = objectMapper.createObjectNode();
                 innerBlock = objectMapper.createObjectNode();
                 innerBlockKey = "";
                 newStatistics.set(blockKey, block);
             } else if (key.matches("   [a-zA-Z].*")) {
+                // Handling element in innermost block
                 innerInnerBlock.set(keyWithoutNumber(key).trim(), value);
             }
         }
 
         return newStatistics;
     }
+
 
 }

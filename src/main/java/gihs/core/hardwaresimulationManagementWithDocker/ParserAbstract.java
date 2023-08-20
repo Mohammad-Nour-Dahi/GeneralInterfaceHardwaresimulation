@@ -194,8 +194,8 @@ public abstract class ParserAbstract implements ParserInterface {
      * @param errorMessage The error message to display.
      */
     private void exitWithError(String errorMessage) {
-        System.err.println(errorMessage + " encountered. Exiting the program.");
         exit();
+        System.err.println(errorMessage + " encountered. Exiting the program.");
         System.exit(1);
     }
 

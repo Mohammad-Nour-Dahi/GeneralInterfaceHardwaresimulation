@@ -26,27 +26,26 @@ public class SniperOutput extends GenerateOutputParametersAbstract {
     private Map<String, String> parameterMap = new HashMap<>();
 
 
-
     /**
      * Constructs a SniperOutput object and initializes the parameter map with additional entries.
      */
-    public SniperOutput(){
-        parameterMap.put("Time (ns)","Time (ns)");
-        parameterMap.put("Instructions","Instructions");
-        parameterMap.put("Cycles","Cycles");
-        parameterMap.put("IPC","IPC");
-        parameterMap.put("Cache Summary.Cache L1-I.num cache misses","Cache Summary.Cache L1-I.num cache misses");
-        parameterMap.put("Cache Summary.Cache L1-D.num cache accesses","Cache Summary.Cache L1-D.num cache accesses");
-        parameterMap.put("Cache Summary.Cache L2.num cache misses","Cache Summary.Cache L2.num cache misses");
+    public SniperOutput() {
+        parameterMap.put("Time (ns)", "Time (ns)");
+        parameterMap.put("Instructions", "Instructions");
+        parameterMap.put("Cycles", "Cycles");
+        parameterMap.put("IPC", "IPC");
+        parameterMap.put("Cache Summary.Cache L1-I.num cache misses", "Cache Summary.Cache L1-I.num cache misses");
+        parameterMap.put("Cache Summary.Cache L1-D.num cache accesses", "Cache Summary.Cache L1-D.num cache accesses");
+        parameterMap.put("Cache Summary.Cache L2.num cache misses", "Cache Summary.Cache L2.num cache misses");
         parameterMap.put("Cache Summary.Cache L1-I.num cache accesses", "Cache Summary.Cache L1-I.num cache accesses");
         parameterMap.put("Cache Summary.Cache L1-D.num cache misses", "Cache Summary.Cache L1-D.num cache misses");
-        parameterMap.put("Cache Summary.Cache L2.num cache accesses","Cache Summary.Cache L2.num cache accesses");
-        parameterMap.put("Cache Summary.Cache L2.miss rate","Cache Summary.Cache L2.miss rate");
+        parameterMap.put("Cache Summary.Cache L2.num cache accesses", "Cache Summary.Cache L2.num cache accesses");
+        parameterMap.put("Cache Summary.Cache L2.miss rate", "Cache Summary.Cache L2.miss rate");
         parameterMap.put("Cache Summary.Cache L1-D.miss rate", "Cache Summary.Cache L1-D.miss rate");
-        parameterMap.put("Cache Summary.Cache L1-I.miss rate","Cache Summary.Cache L1-I.miss rate");
+        parameterMap.put("Cache Summary.Cache L1-I.miss rate", "Cache Summary.Cache L1-I.miss rate");
         parameterMap.put("Cache Summary.Cache L2.mpki", "Cache Summary.Cache L2.mpki");
-        parameterMap.put("Cache Summary.Cache L1-D.mpki","Cache Summary.Cache L1-D.mpki");
-        parameterMap.put( "Cache Summary.Cache L1-I.mpki", "Cache Summary.Cache L1-I.mpki");
+        parameterMap.put("Cache Summary.Cache L1-D.mpki", "Cache Summary.Cache L1-D.mpki");
+        parameterMap.put("Cache Summary.Cache L1-I.mpki", "Cache Summary.Cache L1-I.mpki");
 
     }
 
@@ -69,15 +68,15 @@ public class SniperOutput extends GenerateOutputParametersAbstract {
             generateHardwaresimulationOutputParametersJson = objectMapper.readTree(generateHardwaresimulationOutputParameters);
         } catch (JsonProcessingException e) {
             System.err.println("Error parsing JSON: " + e.getMessage());
-            e.printStackTrace();
+
         }
 
 
         JsonNode finalGenerateHardwaresimulationOutputParametersJson = generateHardwaresimulationOutputParametersJson;
         // Iterate through the parameterMap and add parameters to the resultJson
         parameterMap.forEach((key, outputParameter) -> {
-            if (JsonUtil.has(finalGenerateHardwaresimulationOutputParametersJson,outputParameter)) {
-                JsonNode value = JsonUtil.get(finalGenerateHardwaresimulationOutputParametersJson,key);
+            if (JsonUtil.has(finalGenerateHardwaresimulationOutputParametersJson, outputParameter)) {
+                JsonNode value = JsonUtil.get(finalGenerateHardwaresimulationOutputParametersJson, key);
                 //Adds a percent symbol (%) to the value of a parameter that ends with "rate".
                 if (outputParameter.endsWith("rate")) {
                     String valueWithPercent = value.asText() + "%";
@@ -95,7 +94,6 @@ public class SniperOutput extends GenerateOutputParametersAbstract {
             outputResultJson = objectWriter.writeValueAsString(resultJson);
         } catch (JsonProcessingException e) {
             System.err.println("Error writing JSON: " + e.getMessage());
-            e.printStackTrace();
         }
 
         return outputResultJson;
@@ -131,14 +129,14 @@ public class SniperOutput extends GenerateOutputParametersAbstract {
             newStatistics = getSniperJson(statistics);
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
-            e.printStackTrace();
+
         }
 
         try {
             return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(newStatistics);
         } catch (JsonProcessingException e) {
             System.err.println("Error writing JSON: " + e.getMessage());
-            e.printStackTrace();
+
             return null;
         }
     }
@@ -150,11 +148,13 @@ public class SniperOutput extends GenerateOutputParametersAbstract {
      * @return The JSON representation of the Sniper-specific statistics parameters.
      */
     private ObjectNode getSniperJson(ObjectNode statistics) {
-        ;
         ObjectNode newStatistics = objectMapper.createObjectNode();
 
+        // Iterate over the fields (key-value pairs) in the input statistics JSON object
         Iterator<Map.Entry<String, JsonNode>> iterator = statistics.fields();
+        // Main Block 1: Outer Block
         ObjectNode block = objectMapper.createObjectNode();
+        // Main Block 2: Inner Block
         ObjectNode innerBlock = objectMapper.createObjectNode();
         String key = null;
         String blockKey = "";
@@ -165,6 +165,7 @@ public class SniperOutput extends GenerateOutputParametersAbstract {
             key = keyWithoutNumber(entry.getKey());
             JsonNode value = entry.getValue();
 
+            // New inner block or element
             if (key.matches("  [a-zA-Z].*")) {
                 if (blockKey.length() != 0) {
                     if (value.toString().equals("null")) {
@@ -180,17 +181,18 @@ public class SniperOutput extends GenerateOutputParametersAbstract {
                     newStatistics.set(key.trim(), value);
                 }
             } else if (key.matches("[a-zA-Z].*")) {
+                // New block
                 blockKey = key.trim();
                 block = objectMapper.createObjectNode();
                 innerBlock = objectMapper.createObjectNode();
                 innerBlockKey = "";
                 newStatistics.set(blockKey, block);
             } else if (key.matches("    [a-zA-Z].*")) {
+                // Element in inner Block
                 innerBlock.set(key.trim(), value);
             }
         }
         return newStatistics;
     }
-
 
 }

@@ -22,7 +22,7 @@ public class ZsimParser extends ParserAbstract {
     @Override
     public void parse(JsonNode input) {
         super.parse(input);
-        ERROR_MESSAGES[0] = "ni";
+
 
         String generateHardwaresimulationParameter = "zsim.cfg";
         String zsim_out = "zsim.out";
@@ -37,6 +37,7 @@ public class ZsimParser extends ParserAbstract {
         host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"scons", "-j16"}));
         host.inputFileTOContainer(containerId, programPath, "/usr/local/src/zsim-plusplus/");
         String outputConsoleCompile = host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"gcc", "-static", "-std=c99", "-o", fileName.replaceAll("\\.c", ""), fileName}));
+
         handleOutputConsole(ERROR_MESSAGES,outputConsoleCompile);
         String outputConsole = host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"./build/opt/zsim", "tests/" + generateHardwaresimulationParameter}));
 

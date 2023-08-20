@@ -43,6 +43,7 @@ public class Gem5Parser extends ParserAbstract {
         host.inputFileTOContainer(containerId, binaryPath, "usr/local/src/gem5/");
         String outputConsole = host.outputFromHardwaresimulationConsole(hardwaresimulation.command(new String[]{"build/X86/gem5.opt", "--stats-file=" + gem5Stats, "configs/learning_gem5/part1/generateGem5Parameter.py"}));
         //host.outputFromHardwaresimulationConsole( hardwaresimulation.command(new String[]{"cat", "m5out/" + gem5Stats}));
+
         handleOutputConsole(ERROR_MESSAGES,outputConsole);
 
 

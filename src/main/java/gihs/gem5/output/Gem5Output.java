@@ -113,7 +113,7 @@ public class Gem5Output extends GenerateOutputParametersAbstract {
         try {
             outputResultJson = objectMapper.writer().with(SerializationFeature.INDENT_OUTPUT).writeValueAsString(resultStatsJson);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            System.err.println("Error processing JSON for output: " + e.getMessage());
         }
 
         return outputResultJson;
@@ -131,14 +131,18 @@ public class Gem5Output extends GenerateOutputParametersAbstract {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
+                // Trim leading and trailing spaces
                 line = line.trim();
+                // Remove comments
                 int commentIndex = line.indexOf("#");
                 if (commentIndex != -1) {
                     line = line.substring(0, commentIndex).trim();
                 }
+                // Skip empty lines
                 if (line.isEmpty()) {
-                    continue; // Skip empty lines
+                    continue;
                 }
+                // Split line into key and value parts
                 String[] parts = line.split("\\s+", 2);
                 if (parts.length == 2) {
                     String key = parts[0].trim();
@@ -147,7 +151,7 @@ public class Gem5Output extends GenerateOutputParametersAbstract {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error reading the file: " + e.getMessage());
         }
 
         return jsonOutputParameter;
