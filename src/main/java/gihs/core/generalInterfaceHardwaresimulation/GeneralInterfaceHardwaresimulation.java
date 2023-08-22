@@ -2,23 +2,16 @@ package gihs.core.generalInterfaceHardwaresimulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gihs.core.managementOFJsonNodeALL.JsonUtil;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.io.FileUtils;
-import gihs.gem5.parser.Gem5Parser;
 import gihs.core.hardwaresimulationManagementWithDocker.ParserInterface;
+import gihs.core.managementOFJsonNodeALL.JsonUtil;
+import gihs.gem5.parser.Gem5Parser;
 import gihs.sniper.parser.SniperParser;
 import gihs.zsim.parser.ZsimParser;
+import org.apache.commons.cli.*;
+import org.apache.commons.io.FileUtils;
 
-import javax.xml.bind.ValidationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
