@@ -82,7 +82,7 @@ To build the program, please follow these steps:
 2. Navigate to the `GeneralInterfaceHardwaresimulation` directory.
 3. Run the following command to install all the required dependencies and build the project:
 ```bash
-mvn install
+mvn package
 ```
 
 
