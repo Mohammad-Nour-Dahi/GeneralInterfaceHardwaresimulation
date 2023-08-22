@@ -1,7 +1,7 @@
 {
   "commonParameters": {
     "hardwaresimulation": {
-      "name": "zsim",
+      "name": "gem5",
       "programPath": "D:/outputStats/program/fibonacci.c",
       "binaryPath": "D:/outputStats/program/fibonacci",
       "statsOutputPath": "D:/outputStats"
