@@ -2,7 +2,7 @@ package gihs.core.generalInterfaceHardwaresimulation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gihs.core.hardwaresimulationManagementWithDocker.ParserInterface;
+import gihs.core.parser.ParserInterface;
 import gihs.core.managementOFJsonNodeALL.JsonUtil;
 import gihs.gem5.parser.Gem5Parser;
 import gihs.sniper.parser.SniperParser;
@@ -93,6 +93,9 @@ public class GeneralInterfaceHardwaresimulation {
         } catch (ArithmeticException e) {
             System.err.println("error: " + e.getMessage());
             return; // Exit the method if validation fails
+        } catch (RuntimeException e) {
+            System.err.println("error: " + e.getMessage());
+            return; // Exit the method if validation fails
         }
 
         String hardwareSimulationName = getHardwareSimulationName(jsonFileRootNode);
@@ -108,11 +111,11 @@ public class GeneralInterfaceHardwaresimulation {
         // Check if a valid parser strategy was found.
         if (parserStrategy != null) {
             // Call the 'parse' method on the selected parser strategy object, passing in the 'rootNode'.
-           try {
-               parserStrategy.parse(jsonFileRootNode);
-           }catch (NullPointerException e) {
-               System.err.println(e);
-           }
+            try {
+                parserStrategy.parse(jsonFileRootNode);
+            } catch (NullPointerException e) {
+                System.err.println(e);
+            }
         } else {
             // If the hardware simulation name is not recognized, print an error message.
             System.out.println("Invalid value for 'commonParameters.hardwaresimulation.name' in the JSON file.");
@@ -139,15 +142,19 @@ public class GeneralInterfaceHardwaresimulation {
         }
 
         if (cmd.hasOption("help")) {
+            try {
+                printHelp(options);
+            } catch (RuntimeException e) {
+                throw new RuntimeException(e);
+            }
 
-                    printHelp(options);
 
-            } else if (cmd.hasOption("jsonFile")) {
-                jsonFilePath = cmd.getOptionValue("jsonFile");
+        } else if (cmd.hasOption("jsonFile")) {
+            jsonFilePath = cmd.getOptionValue("jsonFile");
 
-            } else {
+        } else {
 
-                throw new ArithmeticException("\""+ cmd.getArgList().get(0)+"\" is not recognized as an option. Use \"help\" for more information.");
+            throw new ArithmeticException("\"" + cmd.getArgList().get(0) + "\" is not recognized as an option. Use \"help\" for more information.");
 
 
         }
@@ -197,8 +204,8 @@ public class GeneralInterfaceHardwaresimulation {
     /**
      * Creates the command line options for the program.
      * Possible options include:
-     *                                -help             Display help
-     *                                -jsonFile <arg>   Path to the JSON file
+     * -help             Display help
+     * -jsonFile <arg>   Path to the JSON file
      *
      * @return the Options object containing the command line options
      */
@@ -222,13 +229,9 @@ public class GeneralInterfaceHardwaresimulation {
             File readmeFile = new File("../resources/README.md");
             readmeContent = FileUtils.readFileToString(readmeFile, "UTF-8");
         } catch (IOException e) {
-            try {
-                throw new Exception("Error reading README file: " + e.getMessage());
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-            // Stop further processing since there's an error
+            throw new RuntimeException("Error reading README file: " + e.getMessage(), e);
         }
+
 
         formatter.printHelp("General Interface Hardwaresimulation", readmeContent, options, "");
         System.exit(1);

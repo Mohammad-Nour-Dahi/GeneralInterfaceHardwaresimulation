@@ -1,4 +1,4 @@
-package gihs.core.hardwaresimulationManagementWithDocker;
+package gihs.core.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import gihs.core.input.GenerateInputParametersFile;

@@ -1,7 +1,7 @@
 package gihs.sniper.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import gihs.core.hardwaresimulationManagementWithDocker.ParserAbstract;
+import gihs.core.parser.ParserAbstract;
 import gihs.sniper.input.SniperInput;
 import gihs.sniper.output.SniperOutput;
 
